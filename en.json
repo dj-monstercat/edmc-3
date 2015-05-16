@@ -140,5 +140,5 @@
     "website": "/me  This page is down ATM",
     "twitter": "/me This page is down ATM",
     "youtube": "/me [%%NAME%%] Subscribe to us on youtube: %%LINK%%",
-    "songstatistics": "/me %%NAME%% | %%WOOTS%% :blue_heart: | %%GRABS%% :purple_heart: | %%MEHS%% :green_heart:"
+    "songstatistics": "/me %%TITLE%% | %%WOOTS%% :blue_heart: | %%GRABS%% :purple_heart: | %%MEHS%% :green_heart:"
 }
