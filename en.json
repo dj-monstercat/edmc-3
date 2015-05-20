@@ -8,8 +8,8 @@
     "online": "/me [Bot] v%%VERSION%% online!",
 
 
-    "welcome": "/men%%NAME%% has joined the room! :+1:",
-    "welcomeback": "/me %%NAME%% has joined the room! :+1:",
+    "welcome": "/me %%NAME%% Hi plz visit our real room as none will be here :1: https://plug.dj/edmc-3",
+    "welcomeback": "/me %%NAME%% Hi plz visit our real room as none will be here :1: https://plug.dj/edmc-3
     "songknown": "",
     "timelimit": "/me @%%NAME%%, your song is longer than %%MAXLENGTH%% minutes, you need permission to play longer songs.",
     "permissionownsong": "/me :up: @%%NAME%% has permission to play their own production!",
