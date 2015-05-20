@@ -14,20 +14,20 @@
     };
 
     var kill = function () {
-        clearInterval(trapbot.room.autodisableInterval);
-        clearInterval(trapbot.room.afkInterval);
-        trapbot.status = false;
+        clearInterval(basicBot.room.autodisableInterval);
+        clearInterval(basicBot.room.afkInterval);
+        basicBot.status = false;
     };
 
     var storeToStorage = function () {
-        localStorage.setItem("trapbotsettings", JSON.stringify(trapbot.settings));
-        localStorage.setItem("trapbotRoom", JSON.stringify(trapbot.room));
-        var trapbotStorageInfo = {
+        localStorage.setItem("basicBotsettings", JSON.stringify(basicBot.settings));
+        localStorage.setItem("basicBotRoom", JSON.stringify(basicBot.room));
+        var basicBotStorageInfo = {
             time: Date.now(),
             stored: true,
-            version: trapbot.version
+            version: basicBot.version
         };
-        localStorage.setItem("trapbotStorageInfo", JSON.stringify(trapbotStorageInfo));
+        localStorage.setItem("basicBotStorageInfo", JSON.stringify(basicBotStorageInfo));
 
     };
 
@@ -47,32 +47,32 @@
     var loadChat = function (cb) {
         if (!cb) cb = function () {
         };
-        $.get("https://rawgit.com/dj-monstercat/edmc-3/master/langIndex.json", function (json) {
-            var link = trapbot.chatLink;
+        $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json) {
+            var link = basicBot.chatLink;
             if (json !== null && typeof json !== "undefined") {
                 langIndex = json;
-                link = langIndex[trapbot.settings.language.toLowerCase()];
-                if (trapbot.settings.chatLink !== trapbot.chatLink) {
-                    link = trapbot.settings.chatLink;
+                link = langIndex[basicBot.settings.language.toLowerCase()];
+                if (basicBot.settings.chatLink !== basicBot.chatLink) {
+                    link = basicBot.settings.chatLink;
                 }
                 else {
                     if (typeof link === "undefined") {
-                        link = trapbot.chatLink;
+                        link = basicBot.chatLink;
                     }
                 }
                 $.get(link, function (json) {
                     if (json !== null && typeof json !== "undefined") {
                         if (typeof json === "string") json = JSON.parse(json);
-                        trapbot.chat = json;
+                        basicBot.chat = json;
                         cb();
                     }
                 });
             }
             else {
-                $.get(trapbot.chatLink, function (json) {
+                $.get(basicBot.chatLink, function (json) {
                     if (json !== null && typeof json !== "undefined") {
                         if (typeof json === "string") json = JSON.parse(json);
-                        trapbot.chat = json;
+                        basicBot.chat = json;
                         cb();
                     }
                 });
@@ -81,42 +81,42 @@
     };
 
     var retrieveSettings = function () {
-        var settings = JSON.parse(localStorage.getItem("trapbotsettings"));
+        var settings = JSON.parse(localStorage.getItem("basicBotsettings"));
         if (settings !== null) {
             for (var prop in settings) {
-                trapbot.settings[prop] = settings[prop];
+                basicBot.settings[prop] = settings[prop];
             }
         }
     };
 
     var retrieveFromStorage = function () {
-        var info = localStorage.getItem("trapbotStorageInfo");
-        if (info === null) API.chatLog(trapbot.chat.nodatafound);
+        var info = localStorage.getItem("basicBotStorageInfo");
+        if (info === null) API.chatLog(basicBot.chat.nodatafound);
         else {
-            var settings = JSON.parse(localStorage.getItem("trapbotsettings"));
-            var room = JSON.parse(localStorage.getItem("trapbotRoom"));
+            var settings = JSON.parse(localStorage.getItem("basicBotsettings"));
+            var room = JSON.parse(localStorage.getItem("basicBotRoom"));
             var elapsed = Date.now() - JSON.parse(info).time;
             if ((elapsed < 1 * 60 * 60 * 1000)) {
-                API.chatLog(trapbot.chat.retrievingdata);
+                API.chatLog(basicBot.chat.retrievingdata);
                 for (var prop in settings) {
-                    trapbot.settings[prop] = settings[prop];
+                    basicBot.settings[prop] = settings[prop];
                 }
-                trapbot.room.users = room.users;
-                trapbot.room.afkList = room.afkList;
-                trapbot.room.historyList = room.historyList;
-                trapbot.room.mutedUsers = room.mutedUsers;
-                trapbot.room.autoskip = room.autoskip;
-                trapbot.room.roomstats = room.roomstats;
-                trapbot.room.messages = room.messages;
-                trapbot.room.queue = room.queue;
-                trapbot.room.newBlacklisted = room.newBlacklisted;
-                API.chatLog(trapbot.chat.datarestored);
+                basicBot.room.users = room.users;
+                basicBot.room.afkList = room.afkList;
+                basicBot.room.historyList = room.historyList;
+                basicBot.room.mutedUsers = room.mutedUsers;
+                basicBot.room.autoskip = room.autoskip;
+                basicBot.room.roomstats = room.roomstats;
+                basicBot.room.messages = room.messages;
+                basicBot.room.queue = room.queue;
+                basicBot.room.newBlacklisted = room.newBlacklisted;
+                API.chatLog(basicBot.chat.datarestored);
             }
         }
-        /*var json_sett = null;
-        var roominfo = document.getElementById("room-info");
+        var json_sett = null;
+        var roominfo = document.getElementById("room-settings");
         info = roominfo.textContent;
-        var ref_bot = "@trapbot=";
+        var ref_bot = "@basicBot=";
         var ind_ref = info.indexOf(ref_bot);
         if (ind_ref > 0) {
             var link = info.substring(ind_ref + ref_bot.length, info.length);
@@ -128,11 +128,11 @@
                 if (json !== null && typeof json !== "undefined") {
                     json_sett = JSON.parse(json);
                     for (var prop in json_sett) {
-                        trapbot.settings[prop] = json_sett[prop];
+                        basicBot.settings[prop] = json_sett[prop];
                     }
                 }
             });
-        }*/
+        }
 
     };
 
@@ -167,26 +167,31 @@
         return m;
     };
 
-    var botCreator = "dj-monstercat1";
-    var botCreatorIDs = [];
+    var botCreator = "Matthew (Yemasthui)";
+    var botMaintainer = "Benzi (Quoona)"
+    var botCreatorIDs = ["3851534", "4105209"];
 
-    var trapbot = {
-        version: "4",
+    var basicBot = {
+        version: "2.4.5",
         status: false,
-        name: "Flavorz-bot1",
+        name: "basicBot",
         loggedInID: null,
-        scriptLink: "https://rawgit.com/dj-monstercat/edmc-3/master/Bot.js",
-        cmdLink: "http://goo.gl/qPOuYn",
-        chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
+        scriptLink: "https://rawgit.com/Yemasthui/basicBot/master/basicBot.js",
+        cmdLink: "http://git.io/245Ppg",
+        chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
         chat: null,
         loadChat: loadChat,
         retrieveSettings: retrieveSettings,
         retrieveFromStorage: retrieveFromStorage,
         settings: {
-            botName: "EF-Bot",
+            botName: "basicBot",
             language: "english",
-            chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
-            maximumAfk: 220,
+            chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
+            startupCap: 200, // 1-200
+            startupVolume: 20, // 0-100
+            startupEmoji: true, // true or false
+            cmdDeletion: true,
+            maximumAfk: 120,
             afkRemoval: false,
             maximumDc: 60,
             bouncerPlus: true,
@@ -197,9 +202,10 @@
             cycleGuard: true,
             maximumCycletime: 10,
             voteSkip: false,
-            voteSkipLimit: 7,
+            voteSkipLimit: 10,
+            historySkip: false,
             timeGuard: true,
-            maximumSongLength: 8,
+            maximumSongLength: 10,
             autodisable: true,
             commandCooldown: 30,
             usercommandsEnabled: true,
@@ -213,65 +219,27 @@
                 ["nsfw", "The song you contained was NSFW (image or sound). "],
                 ["unavailable", "The song you played was not available for some users. "]
             ],
-            ball: [
-            "Signs point to yes.",
-            "Yes.",
-            "Reply hazy, try again.",
-            "Without a doubt.",
-            "My sources say no.",
-            "As I see it, yes.",
-            "You may rely on it.",
-            "Concentrate and ask again.",
-            "Outlook not so good.",
-            "It is decidedly so.",
-            "Better not tell you now.",
-            "Very doubtful.",
-            "Yes - definitely.",
-            "It is certain.",
-            "Cannot predict now.",
-            "Most likely.",
-            "Ask again later.",
-            "My reply is no.",
-            "Outlook good.",
-            "Don't count on it.",
-            "Yes, in due time.",
-            "My sources say no.",
-            "Definitely not.",
-            "You will have to wait.",
-            "I have my doubts.",
-            "Outlook so so.",
-            "Looks good to me!",
-            "Who knows?",
-            "Looking good!",
-            "Probably.",
-            "Are you kidding?",
-            "Don't bet on it.",
-            "Forget about it.",
-            "I am too drunk, ask A World of Trance.",
-            "Wait what did you say?",
-            "My head hurts, try again later.",
-             ],       
             afkpositionCheck: 15,
             afkRankCheck: "ambassador",
             motdEnabled: false,
-            motdInterval: 20,
-            motd: "",
+            motdInterval: 5,
+            motd: "Temporary Message of the Day",
             filterChat: true,
             etaRestriction: false,
             welcome: true,
-            opLink: "",
-            rulesLink: "null",
+            opLink: null,
+            rulesLink: null,
             themeLink: null,
-            fbLink: "null",
+            fbLink: null,
             youtubeLink: null,
-            website: "null",
+            website: null,
             intervalMessages: [],
             messageInterval: 5,
             songstats: true,
             commandLiteral: "!",
             blacklists: {
-                NSFW: "http://jsim31.wix.com/edm-nation",
-                OP: "http://jsim31.wix.com/edm-nation"
+                NSFW: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/ExampleNSFWlist.json",
+                OP: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/ExampleOPlist.json"
             }
         },
         room: {
@@ -287,8 +255,8 @@
             autoskipTimer: null,
             autodisableInterval: null,
             autodisableFunc: function () {
-                if (trapbot.status && trapbot.settings.autodisable) {
-                    API.sendChat('Visit our fan website by typing !website in the chat');
+                if (basicBot.status && basicBot.settings.autodisable) {
+                    API.sendChat('Loading...');
                 }
             },
             queueing: 0,
@@ -325,23 +293,23 @@
                 participants: [],
                 countdown: null,
                 startRoulette: function () {
-                    trapbot.room.roulette.rouletteStatus = true;
-                    trapbot.room.roulette.countdown = setTimeout(function () {
-                        trapbot.room.roulette.endRoulette();
+                    basicBot.room.roulette.rouletteStatus = true;
+                    basicBot.room.roulette.countdown = setTimeout(function () {
+                        basicBot.room.roulette.endRoulette();
                     }, 60 * 1000);
-                    API.sendChat(trapbot.chat.isopen);
+                    API.sendChat(basicBot.chat.isopen);
                 },
                 endRoulette: function () {
-                    trapbot.room.roulette.rouletteStatus = false;
-                    var ind = Math.floor(Math.random() * trapbot.room.roulette.participants.length);
-                    var winner = trapbot.room.roulette.participants[ind];
-                    trapbot.room.roulette.participants = [];
+                    basicBot.room.roulette.rouletteStatus = false;
+                    var ind = Math.floor(Math.random() * basicBot.room.roulette.participants.length);
+                    var winner = basicBot.room.roulette.participants[ind];
+                    basicBot.room.roulette.participants = [];
                     var pos = Math.floor((Math.random() * API.getWaitList().length) + 1);
-                    var user = trapbot.userUtilities.lookupUser(winner);
+                    var user = basicBot.userUtilities.lookupUser(winner);
                     var name = user.username;
-                    API.sendChat(subChat(trapbot.chat.winnerpicked, {name: name, position: pos}));
+                    API.sendChat(subChat(basicBot.chat.winnerpicked, {name: name, position: pos}));
                     setTimeout(function (winner, pos) {
-                        trapbot.userUtilities.moveUser(winner, pos, false);
+                        basicBot.userUtilities.moveUser(winner, pos, false);
                     }, 1 * 1000, winner, pos);
                 }
             }
@@ -381,7 +349,7 @@
             updateDC: function (user) {
                 user.lastDC.time = Date.now();
                 user.lastDC.position = user.lastKnownPosition;
-                user.lastDC.songCount = trapbot.room.roomstats.songCount;
+                user.lastDC.songCount = basicBot.room.roomstats.songCount;
             },
             setLastActivity: function (user) {
                 user.lastActivity = Date.now();
@@ -398,24 +366,24 @@
                 user.afkWarningCount = value;
             },
             lookupUser: function (id) {
-                for (var i = 0; i < trapbot.room.users.length; i++) {
-                    if (trapbot.room.users[i].id === id) {
-                        return trapbot.room.users[i];
+                for (var i = 0; i < basicBot.room.users.length; i++) {
+                    if (basicBot.room.users[i].id === id) {
+                        return basicBot.room.users[i];
                     }
                 }
                 return false;
             },
             lookupUserName: function (name) {
-                for (var i = 0; i < trapbot.room.users.length; i++) {
-                    var match = trapbot.room.users[i].username.trim() == name.trim();
+                for (var i = 0; i < basicBot.room.users.length; i++) {
+                    var match = basicBot.room.users[i].username.trim() == name.trim();
                     if (match) {
-                        return trapbot.room.users[i];
+                        return basicBot.room.users[i];
                     }
                 }
                 return false;
             },
             voteRatio: function (id) {
-                var user = trapbot.userUtilities.lookupUser(id);
+                var user = basicBot.userUtilities.lookupUser(id);
                 var votes = user.votes;
                 if (votes.meh === 0) votes.ratio = 1;
                 else votes.ratio = (votes.woot / votes.meh).toFixed(2);
@@ -426,7 +394,9 @@
                 var u;
                 if (typeof obj === "object") u = obj;
                 else u = API.getUser(obj);
-                if (botCreatorIDs.indexOf(u.id) > -1) return 10;
+                for (var i = 0; i < botCreatorIDs.length; i++) {
+                    if (botCreatorIDs[i].indexOf(u.id) > -1) return 10;
+                }
                 if (u.gRole < 2) return u.role;
                 else {
                     switch (u.gRole) {
@@ -443,7 +413,7 @@
                 return 0;
             },
             moveUser: function (id, pos, priority) {
-                var user = trapbot.userUtilities.lookupUser(id);
+                var user = basicBot.userUtilities.lookupUser(id);
                 var wlist = API.getWaitList();
                 if (API.getWaitListPosition(id) === -1) {
                     if (wlist.length < 50) {
@@ -454,46 +424,46 @@
                     }
                     else {
                         var alreadyQueued = -1;
-                        for (var i = 0; i < trapbot.room.queue.id.length; i++) {
-                            if (trapbot.room.queue.id[i] === id) alreadyQueued = i;
+                        for (var i = 0; i < basicBot.room.queue.id.length; i++) {
+                            if (basicBot.room.queue.id[i] === id) alreadyQueued = i;
                         }
                         if (alreadyQueued !== -1) {
-                            trapbot.room.queue.position[alreadyQueued] = pos;
-                            return API.sendChat(subChat(trapbot.chat.alreadyadding, {position: trapbot.room.queue.position[alreadyQueued]}));
+                            basicBot.room.queue.position[alreadyQueued] = pos;
+                            return API.sendChat(subChat(basicBot.chat.alreadyadding, {position: basicBot.room.queue.position[alreadyQueued]}));
                         }
-                        trapbot.roomUtilities.booth.lockBooth();
+                        basicBot.roomUtilities.booth.lockBooth();
                         if (priority) {
-                            trapbot.room.queue.id.unshift(id);
-                            trapbot.room.queue.position.unshift(pos);
+                            basicBot.room.queue.id.unshift(id);
+                            basicBot.room.queue.position.unshift(pos);
                         }
                         else {
-                            trapbot.room.queue.id.push(id);
-                            trapbot.room.queue.position.push(pos);
+                            basicBot.room.queue.id.push(id);
+                            basicBot.room.queue.position.push(pos);
                         }
                         var name = user.username;
-                        return API.sendChat(subChat(trapbot.chat.adding, {name: name, position: trapbot.room.queue.position.length}));
+                        return API.sendChat(subChat(basicBot.chat.adding, {name: name, position: basicBot.room.queue.position.length}));
                     }
                 }
                 else API.moderateMoveDJ(id, pos);
             },
             dclookup: function (id) {
-                var user = trapbot.userUtilities.lookupUser(id);
-                if (typeof user === 'boolean') return trapbot.chat.usernotfound;
+                var user = basicBot.userUtilities.lookupUser(id);
+                if (typeof user === 'boolean') return basicBot.chat.usernotfound;
                 var name = user.username;
-                if (user.lastDC.time === null) return subChat(trapbot.chat.notdisconnected, {name: name});
+                if (user.lastDC.time === null) return subChat(basicBot.chat.notdisconnected, {name: name});
                 var dc = user.lastDC.time;
                 var pos = user.lastDC.position;
-                if (pos === null) return trapbot.chat.noposition;
+                if (pos === null) return basicBot.chat.noposition;
                 var timeDc = Date.now() - dc;
                 var validDC = false;
-                if (trapbot.settings.maximumDc * 60 * 1000 > timeDc) {
+                if (basicBot.settings.maximumDc * 60 * 1000 > timeDc) {
                     validDC = true;
                 }
-                var time = trapbot.roomUtilities.msToStr(timeDc);
-                if (!validDC) return (subChat(trapbot.chat.toolongago, {name: trapbot.userUtilities.getUser(user).username, time: time}));
-                var songsPassed = trapbot.room.roomstats.songCount - user.lastDC.songCount;
+                var time = basicBot.roomUtilities.msToStr(timeDc);
+                if (!validDC) return (subChat(basicBot.chat.toolongago, {name: basicBot.userUtilities.getUser(user).username, time: time}));
+                var songsPassed = basicBot.room.roomstats.songCount - user.lastDC.songCount;
                 var afksRemoved = 0;
-                var afkList = trapbot.room.afkList;
+                var afkList = basicBot.room.afkList;
                 for (var i = 0; i < afkList.length; i++) {
                     var timeAfk = afkList[i][1];
                     var posAfk = afkList[i][2];
@@ -503,8 +473,8 @@
                 }
                 var newPosition = user.lastDC.position - songsPassed - afksRemoved;
                 if (newPosition <= 0) newPosition = 1;
-                var msg = subChat(trapbot.chat.valid, {name: trapbot.userUtilities.getUser(user).username, time: time, position: newPosition});
-                trapbot.userUtilities.moveUser(user.id, newPosition, true);
+                var msg = subChat(basicBot.chat.valid, {name: basicBot.userUtilities.getUser(user).username, time: time, position: newPosition});
+                basicBot.userUtilities.moveUser(user.id, newPosition, true);
                 return msg;
             }
         },
@@ -593,47 +563,47 @@
                 }, 1000),
                 locked: false,
                 lockBooth: function () {
-                    API.moderateLockWaitList(!trapbot.roomUtilities.booth.locked);
-                    trapbot.roomUtilities.booth.locked = false;
-                    if (trapbot.settings.lockGuard) {
-                        trapbot.roomUtilities.booth.lockTimer = setTimeout(function () {
-                            API.moderateLockWaitList(trapbot.roomUtilities.booth.locked);
-                        }, trapbot.settings.maximumLocktime * 60 * 1000);
+                    API.moderateLockWaitList(!basicBot.roomUtilities.booth.locked);
+                    basicBot.roomUtilities.booth.locked = false;
+                    if (basicBot.settings.lockGuard) {
+                        basicBot.roomUtilities.booth.lockTimer = setTimeout(function () {
+                            API.moderateLockWaitList(basicBot.roomUtilities.booth.locked);
+                        }, basicBot.settings.maximumLocktime * 60 * 1000);
                     }
                 },
                 unlockBooth: function () {
-                    API.moderateLockWaitList(trapbot.roomUtilities.booth.locked);
-                    clearTimeout(trapbot.roomUtilities.booth.lockTimer);
+                    API.moderateLockWaitList(basicBot.roomUtilities.booth.locked);
+                    clearTimeout(basicBot.roomUtilities.booth.lockTimer);
                 }
             },
             afkCheck: function () {
-                if (!trapbot.status || !trapbot.settings.afkRemoval) return void (0);
-                var rank = trapbot.roomUtilities.rankToNumber(trapbot.settings.afkRankCheck);
+                if (!basicBot.status || !basicBot.settings.afkRemoval) return void (0);
+                var rank = basicBot.roomUtilities.rankToNumber(basicBot.settings.afkRankCheck);
                 var djlist = API.getWaitList();
-                var lastPos = Math.min(djlist.length, trapbot.settings.afkpositionCheck);
+                var lastPos = Math.min(djlist.length, basicBot.settings.afkpositionCheck);
                 if (lastPos - 1 > djlist.length) return void (0);
                 for (var i = 0; i < lastPos; i++) {
                     if (typeof djlist[i] !== 'undefined') {
                         var id = djlist[i].id;
-                        var user = trapbot.userUtilities.lookupUser(id);
+                        var user = basicBot.userUtilities.lookupUser(id);
                         if (typeof user !== 'boolean') {
-                            var plugUser = trapbot.userUtilities.getUser(user);
-                            if (rank !== null && trapbot.userUtilities.getPermission(plugUser) <= rank) {
+                            var plugUser = basicBot.userUtilities.getUser(user);
+                            if (rank !== null && basicBot.userUtilities.getPermission(plugUser) <= rank) {
                                 var name = plugUser.username;
-                                var lastActive = trapbot.userUtilities.getLastActivity(user);
+                                var lastActive = basicBot.userUtilities.getLastActivity(user);
                                 var inactivity = Date.now() - lastActive;
-                                var time = trapbot.roomUtilities.msToStr(inactivity);
+                                var time = basicBot.roomUtilities.msToStr(inactivity);
                                 var warncount = user.afkWarningCount;
-                                if (inactivity > trapbot.settings.maximumAfk * 60 * 1000) {
+                                if (inactivity > basicBot.settings.maximumAfk * 60 * 1000) {
                                     if (warncount === 0) {
-                                        API.sendChat(subChat(trapbot.chat.warning1, {name: name, time: time}));
+                                        API.sendChat(subChat(basicBot.chat.warning1, {name: name, time: time}));
                                         user.afkWarningCount = 3;
                                         user.afkCountdown = setTimeout(function (userToChange) {
                                             userToChange.afkWarningCount = 1;
                                         }, 90 * 1000, user);
                                     }
                                     else if (warncount === 1) {
-                                        API.sendChat(subChat(trapbot.chat.warning2, {name: name}));
+                                        API.sendChat(subChat(basicBot.chat.warning2, {name: name}));
                                         user.afkWarningCount = 3;
                                         user.afkCountdown = setTimeout(function (userToChange) {
                                             userToChange.afkWarningCount = 2;
@@ -643,7 +613,7 @@
                                         var pos = API.getWaitListPosition(id);
                                         if (pos !== -1) {
                                             pos++;
-                                            trapbot.room.afkList.push([id, Date.now(), pos]);
+                                            basicBot.room.afkList.push([id, Date.now(), pos]);
                                             user.lastDC = {
 
                                                 time: null,
@@ -651,7 +621,7 @@
                                                 songCount: 0
                                             };
                                             API.moderateRemoveDJ(id);
-                                            API.sendChat(subChat(trapbot.chat.afkremove, {name: name, time: time, position: pos, maximumafk: trapbot.settings.maximumAfk}));
+                                            API.sendChat(subChat(basicBot.chat.afkremove, {name: name, time: time, position: pos, maximumafk: basicBot.settings.maximumAfk}));
                                         }
                                         user.afkWarningCount = 0;
                                     }
@@ -665,47 +635,47 @@
                 var toggle = $(".cycle-toggle");
                 if (toggle.hasClass("disabled")) {
                     toggle.click();
-                    if (trapbot.settings.cycleGuard) {
-                        trapbot.room.cycleTimer = setTimeout(function () {
+                    if (basicBot.settings.cycleGuard) {
+                        basicBot.room.cycleTimer = setTimeout(function () {
                             if (toggle.hasClass("enabled")) toggle.click();
-                        }, trapbot.settings.cycleMaxTime * 60 * 1000);
+                        }, basicBot.settings.cycleMaxTime * 60 * 1000);
                     }
                 }
                 else {
                     toggle.click();
-                    clearTimeout(trapbot.room.cycleTimer);
+                    clearTimeout(basicBot.room.cycleTimer);
                 }
             },
             intervalMessage: function () {
                 var interval;
-                if (trapbot.settings.motdEnabled) interval = trapbot.settings.motdInterval;
-                else interval = trapbot.settings.messageInterval;
-                if ((trapbot.room.roomstats.songCount % interval) === 0 && trapbot.status) {
+                if (basicBot.settings.motdEnabled) interval = basicBot.settings.motdInterval;
+                else interval = basicBot.settings.messageInterval;
+                if ((basicBot.room.roomstats.songCount % interval) === 0 && basicBot.status) {
                     var msg;
-                    if (trapbot.settings.motdEnabled) {
-                        msg = trapbot.settings.motd;
+                    if (basicBot.settings.motdEnabled) {
+                        msg = basicBot.settings.motd;
                     }
                     else {
-                        if (trapbot.settings.intervalMessages.length === 0) return void (0);
-                        var messageNumber = trapbot.room.roomstats.songCount % trapbot.settings.intervalMessages.length;
-                        msg = trapbot.settings.intervalMessages[messageNumber];
+                        if (basicBot.settings.intervalMessages.length === 0) return void (0);
+                        var messageNumber = basicBot.room.roomstats.songCount % basicBot.settings.intervalMessages.length;
+                        msg = basicBot.settings.intervalMessages[messageNumber];
                     }
                     API.sendChat('/me ' + msg);
                 }
             },
             updateBlacklists: function () {
-                for (var bl in trapbot.settings.blacklists) {
-                    trapbot.room.blacklists[bl] = [];
-                    if (typeof trapbot.settings.blacklists[bl] === 'function') {
-                        trapbot.room.blacklists[bl] = trapbot.settings.blacklists();
+                for (var bl in basicBot.settings.blacklists) {
+                    basicBot.room.blacklists[bl] = [];
+                    if (typeof basicBot.settings.blacklists[bl] === 'function') {
+                        basicBot.room.blacklists[bl] = basicBot.settings.blacklists();
                     }
-                    else if (typeof trapbot.settings.blacklists[bl] === 'string') {
-                        if (trapbot.settings.blacklists[bl] === '') {
+                    else if (typeof basicBot.settings.blacklists[bl] === 'string') {
+                        if (basicBot.settings.blacklists[bl] === '') {
                             continue;
                         }
                         try {
                             (function (l) {
-                                $.get(trapbot.settings.blacklists[l], function (data) {
+                                $.get(basicBot.settings.blacklists[l], function (data) {
                                     if (typeof data === 'string') {
                                         data = JSON.parse(data);
                                     }
@@ -715,7 +685,7 @@
                                             list.push(data[prop].mid);
                                         }
                                     }
-                                    trapbot.room.blacklists[l] = list;
+                                    basicBot.room.blacklists[l] = list;
                                 })
                             })(bl);
                         }
@@ -729,16 +699,16 @@
             },
             logNewBlacklistedSongs: function () {
                 if (typeof console.table !== 'undefined') {
-                    console.table(trapbot.room.newBlacklisted);
+                    console.table(basicBot.room.newBlacklisted);
                 }
                 else {
-                    console.log(trapbot.room.newBlacklisted);
+                    console.log(basicBot.room.newBlacklisted);
                 }
             },
             exportNewBlacklistedSongs: function () {
                 var list = {};
-                for (var i = 0; i < trapbot.room.newBlacklisted.length; i++) {
-                    var track = trapbot.room.newBlacklisted[i];
+                for (var i = 0; i < basicBot.room.newBlacklisted.length; i++) {
+                    var track = basicBot.room.newBlacklisted[i];
                     list[track.list] = [];
                     list[track.list].push({
                         title: track.title,
@@ -752,23 +722,23 @@
         eventChat: function (chat) {
             chat.message = linkFixer(chat.message);
             chat.message = chat.message.trim();
-            for (var i = 0; i < trapbot.room.users.length; i++) {
-                if (trapbot.room.users[i].id === chat.uid) {
-                    trapbot.userUtilities.setLastActivity(trapbot.room.users[i]);
-                    if (trapbot.room.users[i].username !== chat.un) {
-                        trapbot.room.users[i].username = chat.un;
+            for (var i = 0; i < basicBot.room.users.length; i++) {
+                if (basicBot.room.users[i].id === chat.uid) {
+                    basicBot.userUtilities.setLastActivity(basicBot.room.users[i]);
+                    if (basicBot.room.users[i].username !== chat.un) {
+                        basicBot.room.users[i].username = chat.un;
                     }
                 }
             }
-            if (trapbot.chatUtilities.chatFilter(chat)) return void (0);
-            if (!trapbot.chatUtilities.commandCheck(chat))
-                trapbot.chatUtilities.action(chat);
+            if (basicBot.chatUtilities.chatFilter(chat)) return void (0);
+            if (!basicBot.chatUtilities.commandCheck(chat))
+                basicBot.chatUtilities.action(chat);
         },
         eventUserjoin: function (user) {
             var known = false;
             var index = null;
-            for (var i = 0; i < trapbot.room.users.length; i++) {
-                if (trapbot.room.users[i].id === user.id) {
+            for (var i = 0; i < basicBot.room.users.length; i++) {
+                if (basicBot.room.users[i].id === user.id) {
                     known = true;
                     index = i;
                 }
@@ -776,51 +746,51 @@
             var greet = true;
             var welcomeback = null;
             if (known) {
-                trapbot.room.users[index].inRoom = true;
-                var u = trapbot.userUtilities.lookupUser(user.id);
+                basicBot.room.users[index].inRoom = true;
+                var u = basicBot.userUtilities.lookupUser(user.id);
                 var jt = u.jointime;
                 var t = Date.now() - jt;
                 if (t < 10 * 1000) greet = false;
                 else welcomeback = true;
             }
             else {
-                trapbot.room.users.push(new trapbot.User(user.id, user.username));
+                basicBot.room.users.push(new basicBot.User(user.id, user.username));
                 welcomeback = false;
             }
-            for (var j = 0; j < trapbot.room.users.length; j++) {
-                if (trapbot.userUtilities.getUser(trapbot.room.users[j]).id === user.id) {
-                    trapbot.userUtilities.setLastActivity(trapbot.room.users[j]);
-                    trapbot.room.users[j].jointime = Date.now();
+            for (var j = 0; j < basicBot.room.users.length; j++) {
+                if (basicBot.userUtilities.getUser(basicBot.room.users[j]).id === user.id) {
+                    basicBot.userUtilities.setLastActivity(basicBot.room.users[j]);
+                    basicBot.room.users[j].jointime = Date.now();
                 }
 
             }
-            if (trapbot.settings.welcome && greet) {
+            if (basicBot.settings.welcome && greet) {
                 welcomeback ?
                     setTimeout(function (user) {
-                        API.sendChat(subChat(trapbot.chat.welcomeback, {name: user.username}));
+                        API.sendChat(subChat(basicBot.chat.welcomeback, {name: user.username}));
                     }, 1 * 1000, user)
                     :
                     setTimeout(function (user) {
-                        API.sendChat(subChat(trapbot.chat.welcome, {name: user.username}));
+                        API.sendChat(subChat(basicBot.chat.welcome, {name: user.username}));
                     }, 1 * 1000, user);
             }
         },
         eventUserleave: function (user) {
-            for (var i = 0; i < trapbot.room.users.length; i++) {
-                if (trapbot.room.users[i].id === user.id) {
-                    trapbot.userUtilities.updateDC(trapbot.room.users[i]);
-                    trapbot.room.users[i].inRoom = false;
+            for (var i = 0; i < basicBot.room.users.length; i++) {
+                if (basicBot.room.users[i].id === user.id) {
+                    basicBot.userUtilities.updateDC(basicBot.room.users[i]);
+                    basicBot.room.users[i].inRoom = false;
                 }
             }
         },
         eventVoteupdate: function (obj) {
-            for (var i = 0; i < trapbot.room.users.length; i++) {
-                if (trapbot.room.users[i].id === obj.user.id) {
+            for (var i = 0; i < basicBot.room.users.length; i++) {
+                if (basicBot.room.users[i].id === obj.user.id) {
                     if (obj.vote === 1) {
-                        trapbot.room.users[i].votes.woot++;
+                        basicBot.room.users[i].votes.woot++;
                     }
                     else {
-                        trapbot.room.users[i].votes.meh++;
+                        basicBot.room.users[i].votes.meh++;
                     }
                 }
             }
@@ -829,27 +799,28 @@
             var woots = API.getScore().positive;
             var dj = API.getDJ();
 
-            if (trapbot.settings.voteSkip) {
-                if ((mehs - woots) >= (trapbot.settings.voteSkipLimit)) {
-                    API.sendChat(subChat(trapbot.chat.voteskipexceededlimit, {name: dj.username, limit: trapbot.settings.voteSkipLimit}));
+            if (basicBot.settings.voteSkip) {
+                if ((mehs - woots) >= (basicBot.settings.voteSkipLimit)) {
+                    API.sendChat(subChat(basicBot.chat.voteskipexceededlimit, {name: dj.username, limit: basicBot.settings.voteSkipLimit}));
                     API.moderateForceSkip();
                 }
             }
 
         },
         eventCurateupdate: function (obj) {
-            for (var i = 0; i < trapbot.room.users.length; i++) {
-                if (trapbot.room.users[i].id === obj.user.id) {
-                    trapbot.room.users[i].votes.curate++;
+            for (var i = 0; i < basicBot.room.users.length; i++) {
+                if (basicBot.room.users[i].id === obj.user.id) {
+                    basicBot.room.users[i].votes.curate++;
                 }
             }
         },
         eventDjadvance: function (obj) {
-            $("#woot").click();
-            var user = trapbot.userUtilities.lookupUser(obj.dj.id)
-            for(var i = 0; i < trapbot.room.users.length; i++){
-                if(trapbot.room.users[i].id === user.id){
-                    trapbot.room.users[i].lastDC = {
+            $("#woot").click(); // autowoot
+
+            var user = basicBot.userUtilities.lookupUser(obj.dj.id)
+            for(var i = 0; i < basicBot.room.users.length; i++){
+                if(basicBot.room.users[i].id === user.id){
+                    basicBot.room.users[i].lastDC = {
                         time: null,
                         position: null,
                         songCount: 0
@@ -859,59 +830,63 @@
 
             var lastplay = obj.lastPlay;
             if (typeof lastplay === 'undefined') return;
-            if (trapbot.settings.songstats) {
-                if (typeof trapbot.chat.songstatistics === "undefined") {
+            if (basicBot.settings.songstats) {
+                if (typeof basicBot.chat.songstatistics === "undefined") {
                     API.sendChat("/me " + lastplay.media.author + " - " + lastplay.media.title + ": " + lastplay.score.positive + "W/" + lastplay.score.grabs + "G/" + lastplay.score.negative + "M.")
                 }
                 else {
-                    API.sendChat(subChat(trapbot.chat.songstatistics, {artist: lastplay.media.author, title: lastplay.media.title, woots: lastplay.score.positive, grabs: lastplay.score.grabs, mehs: lastplay.score.negative}))
+                    API.sendChat(subChat(basicBot.chat.songstatistics, {artist: lastplay.media.author, title: lastplay.media.title, woots: lastplay.score.positive, grabs: lastplay.score.grabs, mehs: lastplay.score.negative}))
                 }
             }
-            trapbot.room.roomstats.totalWoots += lastplay.score.positive;
-            trapbot.room.roomstats.totalMehs += lastplay.score.negative;
-            trapbot.room.roomstats.totalCurates += lastplay.score.grabs;
-            trapbot.room.roomstats.songCount++;
-            trapbot.roomUtilities.intervalMessage();
-            trapbot.room.currentDJID = obj.dj.id;
+            basicBot.room.roomstats.totalWoots += lastplay.score.positive;
+            basicBot.room.roomstats.totalMehs += lastplay.score.negative;
+            basicBot.room.roomstats.totalCurates += lastplay.score.grabs;
+            basicBot.room.roomstats.songCount++;
+            basicBot.roomUtilities.intervalMessage();
+            basicBot.room.currentDJID = obj.dj.id;
 
             var mid = obj.media.format + ':' + obj.media.cid;
-            for (var bl in trapbot.room.blacklists) {
-                if (trapbot.settings.blacklistEnabled) {
-                    if (trapbot.room.blacklists[bl].indexOf(mid) > -1) {
-                        API.sendChat(subChat(trapbot.chat.isblacklisted, {blacklist: bl}));
+            for (var bl in basicBot.room.blacklists) {
+                if (basicBot.settings.blacklistEnabled) {
+                    if (basicBot.room.blacklists[bl].indexOf(mid) > -1) {
+                        API.sendChat(subChat(basicBot.chat.isblacklisted, {blacklist: bl}));
                         return API.moderateForceSkip();
                     }
                 }
             }
-
-            var alreadyPlayed = false;
-            for (var i = 0; i < trapbot.room.historyList.length; i++) {
-                if (trapbot.room.historyList[i][0] === obj.media.cid) {
-                    var firstPlayed = trapbot.room.historyList[i][1];
-                    var plays = trapbot.room.historyList[i].length - 1;
-                    var lastPlayed = trapbot.room.historyList[i][plays];
-                    API.sendChat(subChat(trapbot.chat.songknown, {plays: plays, timetotal: trapbot.roomUtilities.msToStr(Date.now() - firstPlayed), lasttime: trapbot.roomUtilities.msToStr(Date.now() - lastPlayed)}));
-                    trapbot.room.historyList[i].push(+new Date());
-                    alreadyPlayed = true;
-                }
-            }
-            if (!alreadyPlayed) {
-                trapbot.room.historyList.push([obj.media.cid, +new Date()]);
+            clearTimeout(historySkip);
+            if (basicBot.settings.historySkip) {
+                var alreadyPlayed = false;
+                var apihistory = API.getHistory();
+                var name = obj.dj.username;
+                var historySkip = setTimeout(function () {
+                    for (var i = 0; i < apihistory.length; i++) {
+                        if (apihistory[i].media.cid === obj.media.cid) {
+                            API.sendChat(subChat(basicBot.chat.songknown, {name: name}));
+                            API.moderateForceSkip();
+                            basicBot.room.historyList[i].push(+new Date());
+                            alreadyPlayed = true;
+                        }
+                    }
+                    if (!alreadyPlayed) {
+                        basicBot.room.historyList.push([obj.media.cid, +new Date()]);
+                    }
+                }, 2000);
             }
             var newMedia = obj.media;
-            if (trapbot.settings.timeGuard && newMedia.duration > trapbot.settings.maximumSongLength * 60 && !trapbot.room.roomevent) {
+            if (basicBot.settings.timeGuard && newMedia.duration > basicBot.settings.maximumSongLength * 60 && !basicBot.room.roomevent) {
                 var name = obj.dj.username;
-                API.sendChat(subChat(trapbot.chat.timelimit, {name: name, maxlength: trapbot.settings.maximumSongLength}));
+                API.sendChat(subChat(basicBot.chat.timelimit, {name: name, maxlength: basicBot.settings.maximumSongLength}));
                 API.moderateForceSkip();
             }
             if (user.ownSong) {
-                API.sendChat(subChat(trapbot.chat.permissionownsong, {name: user.username}));
+                API.sendChat(subChat(basicBot.chat.permissionownsong, {name: user.username}));
                 user.ownSong = false;
             }
-            clearTimeout(trapbot.room.autoskipTimer);
-            if (trapbot.room.autoskip) {
+            clearTimeout(basicBot.room.autoskipTimer);
+            if (basicBot.room.autoskip) {
                 var remaining = obj.media.duration * 1000;
-                trapbot.room.autoskipTimer = setTimeout(function () {
+                basicBot.room.autoskipTimer = setTimeout(function () {
                     console.log("Skipping track.");
                     //API.sendChat('Song stuck, skipping...');
                     API.moderateForceSkip();
@@ -922,37 +897,37 @@
         },
         eventWaitlistupdate: function (users) {
             if (users.length < 50) {
-                if (trapbot.room.queue.id.length > 0 && trapbot.room.queueable) {
-                    trapbot.room.queueable = false;
+                if (basicBot.room.queue.id.length > 0 && basicBot.room.queueable) {
+                    basicBot.room.queueable = false;
                     setTimeout(function () {
-                        trapbot.room.queueable = true;
+                        basicBot.room.queueable = true;
                     }, 500);
-                    trapbot.room.queueing++;
+                    basicBot.room.queueing++;
                     var id, pos;
                     setTimeout(
                         function () {
-                            id = trapbot.room.queue.id.splice(0, 1)[0];
-                            pos = trapbot.room.queue.position.splice(0, 1)[0];
+                            id = basicBot.room.queue.id.splice(0, 1)[0];
+                            pos = basicBot.room.queue.position.splice(0, 1)[0];
                             API.moderateAddDJ(id, pos);
                             setTimeout(
                                 function (id, pos) {
                                     API.moderateMoveDJ(id, pos);
-                                    trapbot.room.queueing--;
-                                    if (trapbot.room.queue.id.length === 0) setTimeout(function () {
-                                        trapbot.roomUtilities.booth.unlockBooth();
+                                    basicBot.room.queueing--;
+                                    if (basicBot.room.queue.id.length === 0) setTimeout(function () {
+                                        basicBot.roomUtilities.booth.unlockBooth();
                                     }, 1000);
                                 }, 1000, id, pos);
-                        }, 1000 + trapbot.room.queueing * 2500);
+                        }, 1000 + basicBot.room.queueing * 2500);
                 }
             }
             for (var i = 0; i < users.length; i++) {
-                var user = trapbot.userUtilities.lookupUser(users[i].id);
-                trapbot.userUtilities.updatePosition(user, API.getWaitListPosition(users[i].id) + 1);
+                var user = basicBot.userUtilities.lookupUser(users[i].id);
+                basicBot.userUtilities.updatePosition(user, API.getWaitListPosition(users[i].id) + 1);
             }
         },
         chatcleaner: function (chat) {
-            if (!trapbot.settings.filterChat) return false;
-            if (trapbot.userUtilities.getPermission(chat.uid) > 1) return false;
+            if (!basicBot.settings.filterChat) return false;
+            if (basicBot.userUtilities.getPermission(chat.uid) > 1) return false;
             var msg = chat.message;
             var containsLetters = false;
             for (var i = 0; i < msg.length; i++) {
@@ -971,17 +946,17 @@
                 if (ch >= 'A' && ch <= 'Z') capitals++;
             }
             if (capitals >= 40) {
-                API.sendChat(subChat(trapbot.chat.caps, {name: chat.un}));
+                API.sendChat(subChat(basicBot.chat.caps, {name: chat.un}));
                 return true;
             }
             msg = msg.toLowerCase();
             if (msg === 'skip') {
-                API.sendChat(subChat(trapbot.chat.askskip, {name: chat.un}));
+                API.sendChat(subChat(basicBot.chat.askskip, {name: chat.un}));
                 return true;
             }
-            for (var j = 0; j < trapbot.chatUtilities.spam.length; j++) {
-                if (msg === trapbot.chatUtilities.spam[j]) {
-                    API.sendChat(subChat(trapbot.chat.spam, {name: chat.un}));
+            for (var j = 0; j < basicBot.chatUtilities.spam.length; j++) {
+                if (msg === basicBot.chatUtilities.spam[j]) {
+                    API.sendChat(subChat(basicBot.chat.spam, {name: chat.un}));
                     return true;
                 }
             }
@@ -990,23 +965,23 @@
         chatUtilities: {
             chatFilter: function (chat) {
                 var msg = chat.message;
-                var perm = trapbot.userUtilities.getPermission(chat.uid);
-                var user = trapbot.userUtilities.lookupUser(chat.uid);
+                var perm = basicBot.userUtilities.getPermission(chat.uid);
+                var user = basicBot.userUtilities.lookupUser(chat.uid);
                 var isMuted = false;
-                for (var i = 0; i < trapbot.room.mutedUsers.length; i++) {
-                    if (trapbot.room.mutedUsers[i] === chat.uid) isMuted = true;
+                for (var i = 0; i < basicBot.room.mutedUsers.length; i++) {
+                    if (basicBot.room.mutedUsers[i] === chat.uid) isMuted = true;
                 }
                 if (isMuted) {
                     API.moderateDeleteChat(chat.cid);
                     return true;
                 }
-                if (trapbot.settings.lockdownEnabled) {
+                if (basicBot.settings.lockdownEnabled) {
                     if (perm === 0) {
                         API.moderateDeleteChat(chat.cid);
                         return true;
                     }
                 }
-                if (trapbot.chatcleaner(chat)) {
+                if (basicBot.chatcleaner(chat)) {
                     API.moderateDeleteChat(chat.cid);
                     return true;
                 }
@@ -1014,7 +989,7 @@
                  var plugRoomLinkPatt = /(\bhttps?:\/\/(www.)?plug\.dj[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
                  if (plugRoomLinkPatt.exec(msg)) {
                     if (perm === 0) {
-                        API.sendChat(subChat(trapbot.chat.roomadvertising, {name: chat.un}));
+                        API.sendChat(subChat(basicBot.chat.roomadvertising, {name: chat.un}));
                         API.moderateDeleteChat(chat.cid);
                         return true;
                     }
@@ -1022,7 +997,7 @@
                  **/
                 if (msg.indexOf('http://adf.ly/') > -1) {
                     API.moderateDeleteChat(chat.cid);
-                    API.sendChat(subChat(trapbot.chat.adfly, {name: chat.un}));
+                    API.sendChat(subChat(basicBot.chat.adfly, {name: chat.un}));
                     return true;
                 }
                 if (msg.indexOf('autojoin was not enabled') > 0 || msg.indexOf('AFK message was not enabled') > 0 || msg.indexOf('!afkdisable') > 0 || msg.indexOf('!joindisable') > 0 || msg.indexOf('autojoin disabled') > 0 || msg.indexOf('AFK message disabled') > 0) {
@@ -1030,8 +1005,8 @@
                     return true;
                 }
 
-                var rlJoinChat = trapbot.chat.roulettejoin;
-                var rlLeaveChat = trapbot.chat.rouletteleave;
+                var rlJoinChat = basicBot.chat.roulettejoin;
+                var rlLeaveChat = basicBot.chat.rouletteleave;
 
                 var joinedroulette = rlJoinChat.split('%%NAME%%');
                 if (joinedroulette[1].length > joinedroulette[0].length) joinedroulette = joinedroulette[1];
@@ -1041,7 +1016,7 @@
                 if (leftroulette[1].length > leftroulette[0].length) leftroulette = leftroulette[1];
                 else leftroulette = leftroulette[0];
 
-                if ((msg.indexOf(joinedroulette) > -1 || msg.indexOf(leftroulette) > -1) && chat.uid === trapbot.loggedInID) {
+                if ((msg.indexOf(joinedroulette) > -1 || msg.indexOf(leftroulette) > -1) && chat.uid === basicBot.loggedInID) {
                     setTimeout(function (id) {
                         API.moderateDeleteChat(id);
                     }, 2 * 1000, chat.cid);
@@ -1059,15 +1034,15 @@
                     else cmd = chat.message.substring(0, space);
                 }
                 else return false;
-                var userPerm = trapbot.userUtilities.getPermission(chat.uid);
+                var userPerm = basicBot.userUtilities.getPermission(chat.uid);
                 //console.log("name: " + chat.un + ", perm: " + userPerm);
                 if (chat.message !== "!join" && chat.message !== "!leave") {
-                    if (userPerm === 0 && !trapbot.room.usercommand) return void (0);
-                    if (!trapbot.room.allcommand) return void (0);
+                    if (userPerm === 0 && !basicBot.room.usercommand) return void (0);
+                    if (!basicBot.room.allcommand) return void (0);
                 }
-                if (chat.message === '!eta' && trapbot.settings.etaRestriction) {
+                if (chat.message === '!eta' && basicBot.settings.etaRestriction) {
                     if (userPerm < 2) {
-                        var u = trapbot.userUtilities.lookupUser(chat.uid);
+                        var u = basicBot.userUtilities.lookupUser(chat.uid);
                         if (u.lastEta !== null && (Date.now() - u.lastEta) < 1 * 60 * 60 * 1000) {
                             API.moderateDeleteChat(chat.cid);
                             return void (0);
@@ -1077,14 +1052,14 @@
                 }
                 var executed = false;
 
-                for (var comm in trapbot.commands) {
-                    var cmdCall = trapbot.commands[comm].command;
+                for (var comm in basicBot.commands) {
+                    var cmdCall = basicBot.commands[comm].command;
                     if (!Array.isArray(cmdCall)) {
                         cmdCall = [cmdCall]
                     }
                     for (var i = 0; i < cmdCall.length; i++) {
-                        if (trapbot.settings.commandLiteral + cmdCall[i] === cmd) {
-                            trapbot.commands[comm].functionality(chat, trapbot.settings.commandLiteral + cmdCall[i]);
+                        if (basicBot.settings.commandLiteral + cmdCall[i] === cmd) {
+                            basicBot.commands[comm].functionality(chat, basicBot.settings.commandLiteral + cmdCall[i]);
                             executed = true;
                             break;
                         }
@@ -1092,31 +1067,33 @@
                 }
 
                 if (executed && userPerm === 0) {
-                    trapbot.room.usercommand = false;
+                    basicBot.room.usercommand = false;
                     setTimeout(function () {
-                        trapbot.room.usercommand = true;
-                    }, trapbot.settings.commandCooldown * 1000);
+                        basicBot.room.usercommand = true;
+                    }, basicBot.settings.commandCooldown * 1000);
                 }
                 if (executed) {
-                    API.moderateDeleteChat(chat.cid);
-                    trapbot.room.allcommand = false;
+                    if (basicBot.settings.cmdDeletion) {
+                        API.moderateDeleteChat(chat.cid);
+                    }
+                    basicBot.room.allcommand = false;
                     setTimeout(function () {
-                        trapbot.room.allcommand = true;
+                        basicBot.room.allcommand = true;
                     }, 5 * 1000);
                 }
                 return executed;
             },
             action: function (chat) {
-                var user = trapbot.userUtilities.lookupUser(chat.uid);
+                var user = basicBot.userUtilities.lookupUser(chat.uid);
                 if (chat.type === 'message') {
-                    for (var j = 0; j < trapbot.room.users.length; j++) {
-                        if (trapbot.userUtilities.getUser(trapbot.room.users[j]).id === chat.uid) {
-                            trapbot.userUtilities.setLastActivity(trapbot.room.users[j]);
+                    for (var j = 0; j < basicBot.room.users.length; j++) {
+                        if (basicBot.userUtilities.getUser(basicBot.room.users[j]).id === chat.uid) {
+                            basicBot.userUtilities.setLastActivity(basicBot.room.users[j]);
                         }
 
                     }
                 }
-                trapbot.room.roomstats.chatmessages++;
+                basicBot.room.roomstats.chatmessages++;
             },
             spam: [
                 'hueh', 'hu3', 'brbr', 'heu', 'brbr', 'kkkk', 'spoder', 'mafia', 'zuera', 'zueira',
@@ -1134,26 +1111,23 @@
                 eventUserskip: $.proxy(this.eventUserskip, this),
                 eventUserjoin: $.proxy(this.eventUserjoin, this),
                 eventUserleave: $.proxy(this.eventUserleave, this),
-                eventUserfan: $.proxy(this.eventUserfan, this),
-                eventFriendjoin: $.proxy(this.eventFriendjoin, this),
-                eventFanjoin: $.proxy(this.eventFanjoin, this),
+                //eventFriendjoin: $.proxy(this.eventFriendjoin, this),
                 eventVoteupdate: $.proxy(this.eventVoteupdate, this),
                 eventCurateupdate: $.proxy(this.eventCurateupdate, this),
                 eventRoomscoreupdate: $.proxy(this.eventRoomscoreupdate, this),
                 eventDjadvance: $.proxy(this.eventDjadvance, this),
-                eventDjupdate: $.proxy(this.eventDjupdate, this),
+                //eventDjupdate: $.proxy(this.eventDjupdate, this),
                 eventWaitlistupdate: $.proxy(this.eventWaitlistupdate, this),
                 eventVoteskip: $.proxy(this.eventVoteskip, this),
                 eventModskip: $.proxy(this.eventModskip, this),
                 eventChatcommand: $.proxy(this.eventChatcommand, this),
-                eventHistoryupdate: $.proxy(this.eventHistoryupdate, this)
+                eventHistoryupdate: $.proxy(this.eventHistoryupdate, this),
 
             };
             API.on(API.CHAT, this.proxy.eventChat);
             API.on(API.USER_SKIP, this.proxy.eventUserskip);
             API.on(API.USER_JOIN, this.proxy.eventUserjoin);
             API.on(API.USER_LEAVE, this.proxy.eventUserleave);
-            API.on(API.USER_FAN, this.proxy.eventUserfan);
             API.on(API.VOTE_UPDATE, this.proxy.eventVoteupdate);
             API.on(API.GRAB_UPDATE, this.proxy.eventCurateupdate);
             API.on(API.ROOM_SCORE_UPDATE, this.proxy.eventRoomscoreupdate);
@@ -1168,7 +1142,6 @@
             API.off(API.USER_SKIP, this.proxy.eventUserskip);
             API.off(API.USER_JOIN, this.proxy.eventUserjoin);
             API.off(API.USER_LEAVE, this.proxy.eventUserleave);
-            API.off(API.USER_FAN, this.proxy.eventUserfan);
             API.off(API.VOTE_UPDATE, this.proxy.eventVoteupdate);
             API.off(API.CURATE_UPDATE, this.proxy.eventCurateupdate);
             API.off(API.ROOM_SCORE_UPDATE, this.proxy.eventRoomscoreupdate);
@@ -1183,70 +1156,100 @@
                 return 'Function.'
             };
             var u = API.getUser();
-            if (trapbot.userUtilities.getPermission(u) < 2) return API.chatLog(trapbot.chat.greyuser);
-            if (trapbot.userUtilities.getPermission(u) === 2) API.chatLog(trapbot.chat.bouncer);
-            trapbot.connectAPI();
+            if (basicBot.userUtilities.getPermission(u) < 2) return API.chatLog(basicBot.chat.greyuser);
+            if (basicBot.userUtilities.getPermission(u) === 2) API.chatLog(basicBot.chat.bouncer);
+            basicBot.connectAPI();
             API.moderateDeleteChat = function (cid) {
                 $.ajax({
                     url: "https://plug.dj/_/chat/" + cid,
                     type: "DELETE"
                 })
             };
+
+            var roomURL = window.location.pathname;
+            var Check;
+
+            var detect = function(){
+                if(roomURL != window.location.pathname){
+                    clearInterval(Check)
+                    console.log("Killing bot after room change.");
+                    storeToStorage();
+                    basicBot.disconnectAPI();
+                    setTimeout(function () {
+                        kill();
+                    }, 1000);
+                }
+            };
+
+            Check = setInterval(function(){ detect() }, 100);
+
             retrieveSettings();
             retrieveFromStorage();
-            window.bot = trapbot;
-            trapbot.roomUtilities.updateBlacklists();
-            setInterval(trapbot.roomUtilities.updateBlacklists, 60 * 60 * 1000);
-            trapbot.getNewBlacklistedSongs = trapbot.roomUtilities.exportNewBlacklistedSongs;
-            trapbot.logNewBlacklistedSongs = trapbot.roomUtilities.logNewBlacklistedSongs;
-            if (trapbot.room.roomstats.launchTime === null) {
-                trapbot.room.roomstats.launchTime = Date.now();
+            window.bot = basicBot;
+            basicBot.roomUtilities.updateBlacklists();
+            setInterval(basicBot.roomUtilities.updateBlacklists, 60 * 60 * 1000);
+            basicBot.getNewBlacklistedSongs = basicBot.roomUtilities.exportNewBlacklistedSongs;
+            basicBot.logNewBlacklistedSongs = basicBot.roomUtilities.logNewBlacklistedSongs;
+            if (basicBot.room.roomstats.launchTime === null) {
+                basicBot.room.roomstats.launchTime = Date.now();
             }
 
-            for (var j = 0; j < trapbot.room.users.length; j++) {
-                trapbot.room.users[j].inRoom = false;
+            for (var j = 0; j < basicBot.room.users.length; j++) {
+                basicBot.room.users[j].inRoom = false;
             }
             var userlist = API.getUsers();
             for (var i = 0; i < userlist.length; i++) {
                 var known = false;
                 var ind = null;
-                for (var j = 0; j < trapbot.room.users.length; j++) {
-                    if (trapbot.room.users[j].id === userlist[i].id) {
+                for (var j = 0; j < basicBot.room.users.length; j++) {
+                    if (basicBot.room.users[j].id === userlist[i].id) {
                         known = true;
                         ind = j;
                     }
                 }
                 if (known) {
-                    trapbot.room.users[ind].inRoom = true;
+                    basicBot.room.users[ind].inRoom = true;
                 }
                 else {
-                    trapbot.room.users.push(new trapbot.User(userlist[i].id, userlist[i].username));
-                    ind = trapbot.room.users.length - 1;
+                    basicBot.room.users.push(new basicBot.User(userlist[i].id, userlist[i].username));
+                    ind = basicBot.room.users.length - 1;
                 }
-                var wlIndex = API.getWaitListPosition(trapbot.room.users[ind].id) + 1;
-                trapbot.userUtilities.updatePosition(trapbot.room.users[ind], wlIndex);
+                var wlIndex = API.getWaitListPosition(basicBot.room.users[ind].id) + 1;
+                basicBot.userUtilities.updatePosition(basicBot.room.users[ind], wlIndex);
             }
-            trapbot.room.afkInterval = setInterval(function () {
-                trapbot.roomUtilities.afkCheck()
+            basicBot.room.afkInterval = setInterval(function () {
+                basicBot.roomUtilities.afkCheck()
             }, 10 * 1000);
-            trapbot.room.autodisableInterval = setInterval(function () {
-                trapbot.room.autodisableFunc();
+            basicBot.room.autodisableInterval = setInterval(function () {
+                basicBot.room.autodisableFunc();
             }, 60 * 60 * 1000);
-            trapbot.loggedInID = API.getUser().id;
-            trapbot.status = true;
-            API.sendChat('/cap 78');
-            API.setVolume(50);
+            basicBot.loggedInID = API.getUser().id;
+            basicBot.status = true;
+            API.sendChat('/cap ' + basicBot.settings.startupCap);
+            API.setVolume(basicBot.settings.startupVolume);
             $("#woot").click();
-            var emojibutton = $(".icon-emoji-on");
-            if (emojibutton.length > 0) {
-                emojibutton[0].click();
+            if (basicBot.settings.startupEmoji) {
+                var emojibuttonoff = $(".icon-emoji-off");
+                if (emojibuttonoff.length > 0) {
+                    emojibuttonoff[0].click();
+                }
+                API.chatLog(':smile: Emojis enabled.');
             }
-            loadChat(API.sendChat(subChat(trapbot.chat.online, {botname: trapbot.settings.botName, version: trapbot.version})));
+            else {
+                var emojibuttonon = $(".icon-emoji-on");
+                if (emojibuttonon.length > 0) {
+                    emojibuttonon[0].click();
+                }
+                API.chatLog('Emojis disabled.');
+            }
+            API.chatLog('Avatars capped at ' + basicBot.settings.startupCap);
+            API.chatLog('Volume set to ' + basicBot.settings.startupVolume);
+            loadChat(API.sendChat(subChat(basicBot.chat.online, {botname: basicBot.settings.botName, version: basicBot.version})));
         },
         commands: {
             executable: function (minRank, chat) {
                 var id = chat.uid;
-                var perm = trapbot.userUtilities.getPermission(id);
+                var perm = basicBot.userUtilities.getPermission(id);
                 var minPerm;
                 switch (minRank) {
                     case 'admin':
@@ -1265,7 +1268,7 @@
                         minPerm = 3;
                         break;
                     case 'mod':
-                        if (trapbot.settings.bouncerPlus) {
+                        if (basicBot.settings.bouncerPlus) {
                             minPerm = 2;
                         }
                         else {
@@ -1294,7 +1297,7 @@
                         type: 'startsWith/exact',
                         functionality: function(chat, cmd){
                                 if(this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                                if( !trapbot.commands.executable(this.rank, chat) ) return void (0);
+                                if( !basicBot.commands.executable(this.rank, chat) ) return void (0);
                                 else{
                                 
                                 }
@@ -1308,7 +1311,7 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
                         var now = Date.now();
@@ -1317,15 +1320,15 @@
                         if (msg.length === cmd.length) time = 60;
                         else {
                             time = msg.substring(cmd.length + 1);
-                            if (isNaN(time)) return API.sendChat(subChat(trapbot.chat.invalidtime, {name: chat.un}));
+                            if (isNaN(time)) return API.sendChat(subChat(basicBot.chat.invalidtime, {name: chat.un}));
                         }
-                        for (var i = 0; i < trapbot.room.users.length; i++) {
-                            userTime = trapbot.userUtilities.getLastActivity(trapbot.room.users[i]);
+                        for (var i = 0; i < basicBot.room.users.length; i++) {
+                            userTime = basicBot.userUtilities.getLastActivity(basicBot.room.users[i]);
                             if ((now - userTime) <= (time * 60 * 1000)) {
                                 chatters++;
                             }
                         }
-                        API.sendChat(subChat(trapbot.chat.activeusersintime, {name: chat.un, amount: chatters, time: time}));
+                        API.sendChat(subChat(basicBot.chat.activeusersintime, {name: chat.un, amount: chatters, time: time}));
                     }
                 }
             },
@@ -1336,19 +1339,19 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(trapbot.chat.nouserspecified, {name: chat.un}));
+                        if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified, {name: chat.un}));
                         var name = msg.substr(cmd.length + 2);
-                        var user = trapbot.userUtilities.lookupUserName(name);
+                        var user = basicBot.userUtilities.lookupUserName(name);
                         if (msg.length > cmd.length + 2) {
                             if (typeof user !== 'undefined') {
-                                if (trapbot.room.roomevent) {
-                                    trapbot.room.eventArtists.push(user.id);
+                                if (basicBot.room.roomevent) {
+                                    basicBot.room.eventArtists.push(user.id);
                                 }
                                 API.moderateAddDJ(user.id);
-                            } else API.sendChat(subChat(trapbot.chat.invaliduserspecified, {name: chat.un}));
+                            } else API.sendChat(subChat(basicBot.chat.invaliduserspecified, {name: chat.un}));
                         }
                     }
                 }
@@ -1360,16 +1363,16 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(trapbot.chat.nolimitspecified, {name: chat.un}));
+                        if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nolimitspecified, {name: chat.un}));
                         var limit = msg.substring(cmd.length + 1);
                         if (!isNaN(limit)) {
-                            trapbot.settings.maximumAfk = parseInt(limit, 10);
-                            API.sendChat(subChat(trapbot.chat.maximumafktimeset, {name: chat.un, time: trapbot.settings.maximumAfk}));
+                            basicBot.settings.maximumAfk = parseInt(limit, 10);
+                            API.sendChat(subChat(basicBot.chat.maximumafktimeset, {name: chat.un, time: basicBot.settings.maximumAfk}));
                         }
-                        else API.sendChat(subChat(trapbot.chat.invalidlimitspecified, {name: chat.un}));
+                        else API.sendChat(subChat(basicBot.chat.invalidlimitspecified, {name: chat.un}));
                     }
                 }
             },
@@ -1380,19 +1383,19 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (trapbot.settings.afkRemoval) {
-                            trapbot.settings.afkRemoval = !trapbot.settings.afkRemoval;
-                            clearInterval(trapbot.room.afkInterval);
-                            API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.afkremoval}));
+                        if (basicBot.settings.afkRemoval) {
+                            basicBot.settings.afkRemoval = !basicBot.settings.afkRemoval;
+                            clearInterval(basicBot.room.afkInterval);
+                            API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.afkremoval}));
                         }
                         else {
-                            trapbot.settings.afkRemoval = !trapbot.settings.afkRemoval;
-                            trapbot.room.afkInterval = setInterval(function () {
-                                trapbot.roomUtilities.afkCheck()
+                            basicBot.settings.afkRemoval = !basicBot.settings.afkRemoval;
+                            basicBot.room.afkInterval = setInterval(function () {
+                                basicBot.roomUtilities.afkCheck()
                             }, 2 * 1000);
-                            API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.afkremoval}));
+                            API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.afkremoval}));
                         }
                     }
                 }
@@ -1404,15 +1407,15 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(trapbot.chat.nouserspecified, {name: chat.un}));
+                        if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified, {name: chat.un}));
                         var name = msg.substring(cmd.length + 2);
-                        var user = trapbot.userUtilities.lookupUserName(name);
-                        if (typeof user === 'boolean') return API.sendChat(subChat(trapbot.chat.invaliduserspecified, {name: chat.un}));
-                        trapbot.userUtilities.setLastActivity(user);
-                        API.sendChat(subChat(trapbot.chat.afkstatusreset, {name: chat.un, username: name}));
+                        var user = basicBot.userUtilities.lookupUserName(name);
+                        if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified, {name: chat.un}));
+                        basicBot.userUtilities.setLastActivity(user);
+                        API.sendChat(subChat(basicBot.chat.afkstatusreset, {name: chat.un, username: name}));
                     }
                 }
             },
@@ -1423,17 +1426,46 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(trapbot.chat.nouserspecified, {name: chat.un}));
+                        if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified, {name: chat.un}));
                         var name = msg.substring(cmd.length + 2);
-                        var user = trapbot.userUtilities.lookupUserName(name);
-                        if (typeof user === 'boolean') return API.sendChat(subChat(trapbot.chat.invaliduserspecified, {name: chat.un}));
-                        var lastActive = trapbot.userUtilities.getLastActivity(user);
+                        var user = basicBot.userUtilities.lookupUserName(name);
+                        if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified, {name: chat.un}));
+                        var lastActive = basicBot.userUtilities.getLastActivity(user);
                         var inactivity = Date.now() - lastActive;
-                        var time = trapbot.roomUtilities.msToStr(inactivity);
-                        API.sendChat(subChat(trapbot.chat.inactivefor, {name: chat.un, username: name, time: time}));
+                        var time = basicBot.roomUtilities.msToStr(inactivity);
+
+                        var launchT = basicBot.room.roomstats.launchTime;
+                        var durationOnline = Date.now() - launchT;
+
+                        if (inactivity == durationOnline){
+                            API.sendChat(subChat(basicBot.chat.inactivelonger, {botname: basicBot.settings.botName, name: chat.un, username: name}));
+                        } else {
+                        API.sendChat(subChat(basicBot.chat.inactivefor, {name: chat.un, username: name, time: time}));
+                        }
+                    }
+                }
+            },
+
+            autodisableCommand: {
+                command: 'autodisable',
+                rank: 'bouncer',
+                type: 'exact',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        if (basicBot.settings.autodisable) {
+                            basicBot.settings.autodisable = !basicBot.settings.autodisable;
+                            return API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.autodisable}));
+                        }
+                        else {
+                            basicBot.settings.autodisable = !basicBot.settings.autodisable;
+                            return API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.autodisable}));
+                        }
+
                     }
                 }
             },
@@ -1444,16 +1476,16 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (trapbot.room.autoskip) {
-                            trapbot.room.autoskip = !trapbot.room.autoskip;
-                            clearTimeout(trapbot.room.autoskipTimer);
-                            return API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.autoskip}));
+                        if (basicBot.room.autoskip) {
+                            basicBot.room.autoskip = !basicBot.room.autoskip;
+                            clearTimeout(basicBot.room.autoskipTimer);
+                            return API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.autoskip}));
                         }
                         else {
-                            trapbot.room.autoskip = !trapbot.room.autoskip;
-                            return API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.autoskip}));
+                            basicBot.room.autoskip = !basicBot.room.autoskip;
+                            return API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.autoskip}));
                         }
                     }
                 }
@@ -1465,9 +1497,9 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        API.sendChat(trapbot.chat.autowoot);
+                        API.sendChat(basicBot.chat.autowoot);
                     }
                 }
             },
@@ -1478,10 +1510,29 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        API.sendChat(trapbot.chat.brandambassador);
+                        API.sendChat(basicBot.chat.brandambassador);
                     }
+                }
+            },
+
+            ballCommand: {
+                command: ['8ball', 'ask'],
+                rank: 'user',
+                type: 'startsWith',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                            var crowd = API.getUsers();
+                            var msg = chat.message;
+                            var argument = msg.substring(cmd.length + 1);
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomBall = Math.floor(Math.random() * basicBot.chat.balls.length);
+                            var randomSentence = Math.floor(Math.random() * 1);
+                            API.sendChat(subChat(basicBot.chat.ball, {name: chat.un, botname: basicBot.settings.botName, question: argument, response: basicBot.chat.balls[randomBall]}));
+                     }
                 }
             },
 
@@ -1491,13 +1542,13 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(trapbot.chat.nouserspecified, {name: chat.un}));
+                        if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified, {name: chat.un}));
                         var name = msg.substr(cmd.length + 2);
-                        var user = trapbot.userUtilities.lookupUserName(name);
-                        if (typeof user === 'boolean') return API.sendChat(subChat(trapbot.chat.invaliduserspecified, {name: chat.un}));
+                        var user = basicBot.userUtilities.lookupUserName(name);
+                        if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified, {name: chat.un}));
                         API.moderateBanUser(user.id, 1, API.BAN.DAY);
                     }
                 }
@@ -1509,12 +1560,12 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(trapbot.chat.nolistspecified, {name: chat.un}));
+                        if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nolistspecified, {name: chat.un}));
                         var list = msg.substr(cmd.length + 1);
-                        if (typeof trapbot.room.blacklists[list] === 'undefined') return API.sendChat(subChat(trapbot.chat.invalidlistspecified, {name: chat.un}));
+                        if (typeof basicBot.room.blacklists[list] === 'undefined') return API.sendChat(subChat(basicBot.chat.invalidlistspecified, {name: chat.un}));
                         else {
                             var media = API.getMedia();
                             var track = {
@@ -1523,12 +1574,12 @@
                                 title: media.title,
                                 mid: media.format + ':' + media.cid
                             };
-                            trapbot.room.newBlacklisted.push(track);
-                            trapbot.room.blacklists[list].push(media.format + ':' + media.cid);
-                            API.sendChat(subChat(trapbot.chat.newblacklisted, {name: chat.un, blacklist: list, author: media.author, title: media.title, mid: media.format + ':' + media.cid}));
+                            basicBot.room.newBlacklisted.push(track);
+                            basicBot.room.blacklists[list].push(media.format + ':' + media.cid);
+                            API.sendChat(subChat(basicBot.chat.newblacklisted, {name: chat.un, blacklist: list, author: media.author, title: media.title, mid: media.format + ':' + media.cid}));
                             API.moderateForceSkip();
-                            if (typeof trapbot.room.newBlacklistedSongFunction === 'function') {
-                                trapbot.room.newBlacklistedSongFunction(track);
+                            if (typeof basicBot.room.newBlacklistedSongFunction === 'function') {
+                                basicBot.room.newBlacklistedSongFunction(track);
                             }
                         }
                     }
@@ -1541,7 +1592,7 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var author = API.getMedia().author;
                         var title = API.getMedia().title;
@@ -1550,7 +1601,7 @@
                         var cid = API.getMedia().cid;
                         var songid = format + ":" + cid;
 
-                        API.sendChat(subChat(trapbot.chat.blinfo, {name: name, author: author, title: title, songid: songid}));
+                        API.sendChat(subChat(basicBot.chat.blinfo, {name: name, author: author, title: title, songid: songid}));
                     }
                 }
             },
@@ -1561,23 +1612,42 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (trapbot.settings.bouncerPlus) {
-                            trapbot.settings.bouncerPlus = false;
-                            return API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': 'Bouncer+'}));
+                        if (basicBot.settings.bouncerPlus) {
+                            basicBot.settings.bouncerPlus = false;
+                            return API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': 'Bouncer+'}));
                         }
                         else {
-                            if (!trapbot.settings.bouncerPlus) {
+                            if (!basicBot.settings.bouncerPlus) {
                                 var id = chat.uid;
-                                var perm = trapbot.userUtilities.getPermission(id);
+                                var perm = basicBot.userUtilities.getPermission(id);
                                 if (perm > 2) {
-                                    trapbot.settings.bouncerPlus = true;
-                                    return API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': 'Bouncer+'}));
+                                    basicBot.settings.bouncerPlus = true;
+                                    return API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': 'Bouncer+'}));
                                 }
                             }
-                            else return API.sendChat(subChat(trapbot.chat.bouncerplusrank, {name: chat.un}));
+                            else return API.sendChat(subChat(basicBot.chat.bouncerplusrank, {name: chat.un}));
+                        }
+                    }
+                }
+            },
+
+            botnameCommand: {
+                command: 'botname',
+                rank: 'manager',
+                type: 'startsWith',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        var msg = chat.message;
+                        if (msg.length <= cmd.length + 1) return API.sendChat(subChat(basicBot.chat.currentbotname, {botname: basicBot.settings.botName}));
+                        var argument = msg.substring(cmd.length + 1);
+                        if (argument) {
+                            basicBot.settings.botName = argument;
+                            API.sendChat(subChat(basicBot.chat.botnameset, {botName: basicBot.settings.botName}));
                         }
                     }
                 }
@@ -1589,13 +1659,13 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var currentchat = $('#chat-messages').children();
                         for (var i = 0; i < currentchat.length; i++) {
                             API.moderateDeleteChat(currentchat[i].getAttribute("data-cid"));
                         }
-                        return API.sendChat(subChat(trapbot.chat.chatcleared, {name: chat.un}));
+                        return API.sendChat(subChat(basicBot.chat.chatcleared, {name: chat.un}));
                     }
                 }
             },
@@ -1606,9 +1676,29 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        API.sendChat(subChat(trapbot.chat.commandslink, {botname: trapbot.settings.botName, link: trapbot.cmdLink}));
+                        API.sendChat(subChat(basicBot.chat.commandslink, {botname: basicBot.settings.botName, link: basicBot.cmdLink}));
+                    }
+                }
+            },
+
+            cmddeletionCommand: {
+                command: ['commanddeletion', 'cmddeletion', 'cmddel'],
+                rank: 'mod',
+                type: 'exact',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        if (basicBot.settings.cmdDeletion) {
+                            basicBot.settings.cmdDeletion = !basicBot.settings.cmdDeletion;
+                            API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.cmddeletion}));
+                        }
+                        else {
+                            basicBot.settings.cmdDeletion = !basicBot.settings.cmdDeletion;
+                            API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.cmddeletion}));
+                        }
                     }
                 }
             },
@@ -1617,53 +1707,32 @@
                 command: 'cookie',
                 rank: 'user',
                 type: 'startsWith',
-                cookies: ['has given you a chocolate chip cookie!',
-                    'has given you a soft homemade oatmeal cookie!',
-                    'has given you a plain, dry, old cookie. It was the last one in the bag. Gross.',
-                    'gives you a sugar cookie. What, no frosting and sprinkles? 0/10 would not touch.',
-                    'gives you a chocolate chip cookie. Oh wait, those are raisins. Bleck!',
-                    'gives you an enormous cookie. Poking it gives you more cookies. Weird.',
-                    'gives you a fortune cookie. It reads "Why aren\'t you working on any projects?"',
-                    'gives you a fortune cookie. It reads "Give that special someone a compliment"',
-                    'gives you a fortune cookie. It reads "Take a risk!"',
-                    'gives you a fortune cookie. It reads "Go outside."',
-                    'gives you a fortune cookie. It reads "Don\'t forget to eat your veggies!"',
-                    'gives you a fortune cookie. It reads "Do you even lift?"',
-                    'gives you a fortune cookie. It reads "m808 pls"',
-                    'gives you a fortune cookie. It reads "If you move your hips, you\'ll get all the ladies."',
-                    'gives you a fortune cookie. It reads "I love you."',
-                    'gives you a Golden Cookie. You can\'t eat it because it is made of gold. Dammit.',
-                    'gives you an Oreo cookie with a glass of milk!',
-                    'gives you a rainbow cookie made with love :heart:',
-                    'gives you an old cookie that was left out in the rain, it\'s moldy.',
-                    'bakes you fresh cookies, it smells amazing.'
-                ],
-                getCookie: function () {
-                    var c = Math.floor(Math.random() * this.cookies.length);
-                    return this.cookies[c];
+                getCookie: function (chat) {
+                    var c = Math.floor(Math.random() * basicBot.chat.cookies.length);
+                    return basicBot.chat.cookies[c];
                 },
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
 
                         var space = msg.indexOf(' ');
                         if (space === -1) {
-                            API.sendChat(trapbot.chat.eatcookie);
+                            API.sendChat(basicBot.chat.eatcookie);
                             return false;
                         }
                         else {
                             var name = msg.substring(space + 2);
-                            var user = trapbot.userUtilities.lookupUserName(name);
+                            var user = basicBot.userUtilities.lookupUserName(name);
                             if (user === false || !user.inRoom) {
-                                return API.sendChat(subChat(trapbot.chat.nousercookie, {name: name}));
+                                return API.sendChat(subChat(basicBot.chat.nousercookie, {name: name}));
                             }
                             else if (user.username === chat.un) {
-                                return API.sendChat(subChat(trapbot.chat.selfcookie, {name: name}));
+                                return API.sendChat(subChat(basicBot.chat.selfcookie, {name: name}));
                             }
                             else {
-                                return API.sendChat(subChat(trapbot.chat.cookie, {nameto: user.username, namefrom: chat.un, cookie: this.getCookie()}));
+                                return API.sendChat(subChat(basicBot.chat.cookie, {nameto: user.username, namefrom: chat.un, cookie: this.getCookie()}));
                             }
                         }
                     }
@@ -1676,9 +1745,9 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        trapbot.roomUtilities.changeDJCycle();
+                        basicBot.roomUtilities.changeDJCycle();
                     }
                 }
             },
@@ -1689,15 +1758,15 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (trapbot.settings.cycleGuard) {
-                            trapbot.settings.cycleGuard = !trapbot.settings.cycleGuard;
-                            return API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.cycleguard}));
+                        if (basicBot.settings.cycleGuard) {
+                            basicBot.settings.cycleGuard = !basicBot.settings.cycleGuard;
+                            return API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.cycleguard}));
                         }
                         else {
-                            trapbot.settings.cycleGuard = !trapbot.settings.cycleGuard;
-                            return API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.cycleguard}));
+                            basicBot.settings.cycleGuard = !basicBot.settings.cycleGuard;
+                            return API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.cycleguard}));
                         }
 
                     }
@@ -1710,59 +1779,16 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
                         var cycleTime = msg.substring(cmd.length + 1);
                         if (!isNaN(cycleTime) && cycleTime !== "") {
-                            trapbot.settings.maximumCycletime = cycleTime;
-                            return API.sendChat(subChat(trapbot.chat.cycleguardtime, {name: chat.un, time: trapbot.settings.maximumCycletime}));
+                            basicBot.settings.maximumCycletime = cycleTime;
+                            return API.sendChat(subChat(basicBot.chat.cycleguardtime, {name: chat.un, time: basicBot.settings.maximumCycletime}));
                         }
-                        else return API.sendChat(subChat(trapbot.chat.invalidtime, {name: chat.un}));
+                        else return API.sendChat(subChat(basicBot.chat.invalidtime, {name: chat.un}));
 
-                    }
-                }
-            },
-
-            voteskipCommand: {
-                command: 'voteskip',
-                rank: 'manager',
-                type: 'startsWith',
-                functionality: function (chat, cmd) {
-                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
-                    else {
-                        var msg = chat.message;
-                        if (msg.length <= cmd.length + 1) return API.sendChat(subChat(trapbot.chat.voteskiplimit, {name: chat.un, limit: trapbot.settings.voteSkipLimit}));
-                        var argument = msg.substring(cmd.length + 1);
-                        if (!trapbot.settings.voteSkip) trapbot.settings.voteSkip = !trapbot.settings.voteSkip;
-                        if (isNaN(argument)) {
-                            API.sendChat(subChat(trapbot.chat.voteskipinvalidlimit, {name: chat.un}));
-                        }
-                        else {
-                            trapbot.settings.voteSkipLimit = argument;
-                            API.sendChat(subChat(trapbot.chat.voteskipsetlimit, {name: chat.un, limit: trapbot.settings.voteSkipLimit}));
-                        }
-                    }
-                }
-            },
-
-            togglevoteskipCommand: {
-                command: 'togglevoteskip',
-                rank: 'bouncer',
-                type: 'exact',
-                functionality: function (chat, cmd) {
-                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
-                    else {
-                        if (trapbot.settings.voteSkip) {
-                            trapbot.settings.voteSkip = !trapbot.settings.voteSkip;
-                            API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.voteskip}));
-                        }
-                        else {
-                            trapbot.settings.motdEnabled = !trapbot.settings.motdEnabled;
-                            API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.voteskip}));
-                        }
                     }
                 }
             },
@@ -1773,49 +1799,64 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
                         var name;
                         if (msg.length === cmd.length) name = chat.un;
                         else {
                             name = msg.substring(cmd.length + 2);
-                            var perm = trapbot.userUtilities.getPermission(chat.uid);
-                            if (perm < 2) return API.sendChat(subChat(trapbot.chat.dclookuprank, {name: chat.un}));
+                            var perm = basicBot.userUtilities.getPermission(chat.uid);
+                            if (perm < 2) return API.sendChat(subChat(basicBot.chat.dclookuprank, {name: chat.un}));
                         }
-                        var user = trapbot.userUtilities.lookupUserName(name);
-                        if (typeof user === 'boolean') return API.sendChat(subChat(trapbot.chat.invaliduserspecified, {name: chat.un}));
-                        var toChat = trapbot.userUtilities.dclookup(user.id);
+                        var user = basicBot.userUtilities.lookupUserName(name);
+                        if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified, {name: chat.un}));
+                        var toChat = basicBot.userUtilities.dclookup(user.id);
                         API.sendChat(toChat);
                     }
                 }
             },
 
-            deletechatCommand: {
+            /*deletechatCommand: {
                 command: 'deletechat',
                 rank: 'mod',
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(trapbot.chat.nouserspecified, {name: chat.un}));
+                        if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified, {name: chat.un}));
                         var name = msg.substring(cmd.length + 2);
-                        var user = trapbot.userUtilities.lookupUserName(name);
-                        if (typeof user === 'boolean') return API.sendChat(subChat(trapbot.chat.invaliduserspecified, {name: chat.un}));
+                        var user = basicBot.userUtilities.lookupUserName(name);
+                        if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified, {name: chat.un}));
                         var chats = $('.from');
+                        var message = $('.message');
+                        var emote = $('.emote');
+                        var from = $('.un.clickable');
                         for (var i = 0; i < chats.length; i++) {
-                            var n = chats[i].textContent;
+                            var n = from[i].textContent;
                             if (name.trim() === n.trim()) {
-                                var cid = $(chats[i]).parent()[0].getAttribute('data-cid');
-                                API.moderateDeleteChat(cid);
+                                // var messagecid = $(message)[i].getAttribute('data-cid');
+                                // var emotecid = $(emote)[i].getAttribute('data-cid');
+                                // API.moderateDeleteChat(messagecid);
+                                // try {
+                                //     API.moderateDeleteChat(messagecid);
+                                // }
+                                // finally {
+                                //     API.moderateDeleteChat(emotecid);
+                                // }
+                                if (typeof $(message)[i].getAttribute('data-cid') == "undefined"){
+                                    API.moderateDeleteChat($(emote)[i].getAttribute('data-cid')); // works well with normal messages but not with emotes due to emotes and messages are seperate.
+                                } else {
+                                    API.moderateDeleteChat($(message)[i].getAttribute('data-cid'));
+                                }
                             }
                         }
-                        API.sendChat(subChat(trapbot.chat.deletechat, {name: chat.un, username: name}));
+                        API.sendChat(subChat(basicBot.chat.deletechat, {name: chat.un, username: name}));
                     }
                 }
-            },
+            },*/
 
             emojiCommand: {
                 command: 'emoji',
@@ -1823,10 +1864,43 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var link = 'http://www.emoji-cheat-sheet.com/';
-                        API.sendChat(subChat(trapbot.chat.emojilist, {link: link}));
+                        API.sendChat(subChat(basicBot.chat.emojilist, {link: link}));
+                    }
+                }
+            },
+
+            englishCommand: {
+                command: 'english',
+                rank: 'bouncer',
+                type: 'startsWith',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        if(chat.message.length === cmd.length) return API.sendChat('/me No user specified.');
+                        var name = chat.message.substring(cmd.length + 2);
+                        var user = basicBot.userUtilities.lookupUserName(name);
+                        if(typeof user === 'boolean') return API.sendChat('/me Invalid user specified.');
+                        var lang = basicBot.userUtilities.getUser(user).language;
+                        var ch = '/me @' + name + ' ';
+                        switch(lang){
+                            case 'en': break;
+                            case 'da': ch += 'Vær venlig at tale engelsk.'; break;
+                            case 'de': ch += 'Bitte sprechen Sie Englisch.'; break;
+                            case 'es': ch += 'Por favor, hable Inglés.'; break;
+                            case 'fr': ch += 'Parlez anglais, s\'il vous plaît.'; break;
+                            case 'nl': ch += 'Spreek Engels, alstublieft.'; break;
+                            case 'pl': ch += 'Proszę mówić po angielsku.'; break;
+                            case 'pt': ch += 'Por favor, fale Inglês.'; break;
+                            case 'sk': ch += 'Hovorte po anglicky, prosím.'; break;
+                            case 'cs': ch += 'Mluvte prosím anglicky.'; break;
+                            case 'sr': ch += 'Молим Вас, говорите енглески.'; break;                                  
+                        }
+                        ch += ' English please.';
+                        API.sendChat(ch);
                     }
                 }
             },
@@ -1837,23 +1911,23 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        var perm = trapbot.userUtilities.getPermission(chat.uid);
+                        var perm = basicBot.userUtilities.getPermission(chat.uid);
                         var msg = chat.message;
                         var name;
                         if (msg.length > cmd.length) {
                             if (perm < 2) return void (0);
                             name = msg.substring(cmd.length + 2);
                         } else name = chat.un;
-                        var user = trapbot.userUtilities.lookupUserName(name);
-                        if (typeof user === 'boolean') return API.sendChat(subChat(trapbot.chat.invaliduserspecified, {name: chat.un}));
+                        var user = basicBot.userUtilities.lookupUserName(name);
+                        if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified, {name: chat.un}));
                         var pos = API.getWaitListPosition(user.id);
-                        if (pos < 0) return API.sendChat(subChat(trapbot.chat.notinwaitlist, {name: name}));
+                        if (pos < 0) return API.sendChat(subChat(basicBot.chat.notinwaitlist, {name: name}));
                         var timeRemaining = API.getTimeRemaining();
                         var estimateMS = ((pos + 1) * 4 * 60 + timeRemaining) * 1000;
-                        var estimateString = trapbot.roomUtilities.msToStr(estimateMS);
-                        API.sendChat(subChat(trapbot.chat.eta, {name: name, time: estimateString}));
+                        var estimateString = basicBot.roomUtilities.msToStr(estimateMS);
+                        API.sendChat(subChat(basicBot.chat.eta, {name: name, time: estimateString}));
                     }
                 }
             },
@@ -1864,9 +1938,10 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        API.sendChat(subChat(trapbot.chat.facebook, {link: trapbot.settings.fbLink}));
+                        if (typeof basicBot.settings.fbLink === "string")
+                            API.sendChat(subChat(basicBot.chat.facebook, {link: basicBot.settings.fbLink}));
                     }
                 }
             },
@@ -1877,15 +1952,107 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (trapbot.settings.filterChat) {
-                            trapbot.settings.filterChat = !trapbot.settings.filterChat;
-                            return API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.chatfilter}));
+                        if (basicBot.settings.filterChat) {
+                            basicBot.settings.filterChat = !basicBot.settings.filterChat;
+                            return API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.chatfilter}));
                         }
                         else {
-                            trapbot.settings.filterChat = !trapbot.settings.filterChat;
-                            return API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.chatfilter}));
+                            basicBot.settings.filterChat = !basicBot.settings.filterChat;
+                            return API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.chatfilter}));
+                        }
+                    }
+                }
+            },
+
+            ghostbusterCommand: {
+                command: 'ghostbuster',
+                rank: 'user',
+                type: 'startsWith',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        var msg = chat.message;
+                        var name;
+                        if (msg.length === cmd.length) name = chat.un;
+                        else {
+                            name = msg.substr(cmd.length + 2);
+                        }
+                        var user = basicBot.userUtilities.lookupUserName(name);
+                        if (user === false || !user.inRoom) {
+                            return API.sendChat(subChat(basicBot.chat.ghosting, {name1: chat.un, name2: name}));
+                        }
+                        else API.sendChat(subChat(basicBot.chat.notghosting, {name1: chat.un, name2: name}));     
+                    }
+                }
+            },
+
+            gifCommand: {
+                command: ['gif', 'giphy'],
+                rank: 'user',
+                type: 'startsWith',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        var msg = chat.message;
+                        if (msg.length !== cmd.length) {
+                            function get_id(api_key, fixedtag, func)
+                            {
+                                $.getJSON(
+                                    "https://tv.giphy.com/v1/gifs/random?", 
+                                    { 
+                                        "format": "json",
+                                        "api_key": api_key,
+                                        "rating": rating,
+                                        "tag": fixedtag
+                                    },
+                                    function(response)
+                                    {
+                                        func(response.data.id);
+                                    }
+                                    )
+                            }
+                            var api_key = "dc6zaTOxFJmzC"; // public beta key
+                            var rating = "pg-13"; // PG 13 gifs
+                            var tag = msg.substr(cmd.length + 1);
+                            var fixedtag = tag.replace(/ /g,"+");
+                            var commatag = tag.replace(/ /g,", ");
+                            get_id(api_key, tag, function(id) {
+                                if (typeof id !== 'undefined') {
+                                    API.sendChat(subChat(basicBot.chat.validgiftags, {name: chat.un, id: id, tags: commatag}));
+                                } else {
+                                    API.sendChat(subChat(basicBot.chat.invalidgiftags, {name: chat.un, tags: commatag}));
+                                }
+                            });
+                        }
+                        else {
+                            function get_random_id(api_key, func)
+                            {
+                                $.getJSON(
+                                    "https://tv.giphy.com/v1/gifs/random?", 
+                                    { 
+                                        "format": "json",
+                                        "api_key": api_key,
+                                        "rating": rating
+                                    },
+                                    function(response)
+                                    {
+                                        func(response.data.id);
+                                    }
+                                    )
+                            }
+                            var api_key = "dc6zaTOxFJmzC"; // public beta key
+                            var rating = "pg-13"; // PG 13 gifs
+                            get_random_id(api_key, function(id) {
+                                if (typeof id !== 'undefined') {
+                                    API.sendChat(subChat(basicBot.chat.validgifrandom, {name: chat.un, id: id}));
+                                } else {
+                                    API.sendChat(subChat(basicBot.chat.invalidgifrandom, {name: chat.un}));
+                                }
+                            });
                         }
                     }
                 }
@@ -1897,10 +2064,30 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        var link = "http://i.imgur.com/SBAso1N.jpg";
-                        API.sendChat(subChat(trapbot.chat.starterhelp, {link: link}));
+                        var link = "(Updated link coming soon)";
+                        API.sendChat(subChat(basicBot.chat.starterhelp, {link: link}));
+                    }
+                }
+            },
+
+            historyskipCommand: {
+                command: 'historyskip',
+                rank: 'bouncer',
+                type: 'exact',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        if (basicBot.settings.historySkip) {
+                            basicBot.settings.historySkip = !basicBot.settings.historySkip;
+                            API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.historyskip}));
+                        }
+                        else {
+                            basicBot.settings.historySkip = !basicBot.settings.historySkip;
+                            API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.historyskip}));
+                        }
                     }
                 }
             },
@@ -1911,11 +2098,11 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (trapbot.room.roulette.rouletteStatus && trapbot.room.roulette.participants.indexOf(chat.uid) < 0) {
-                            trapbot.room.roulette.participants.push(chat.uid);
-                            API.sendChat(subChat(trapbot.chat.roulettejoin, {name: chat.un}));
+                        if (basicBot.room.roulette.rouletteStatus && basicBot.room.roulette.participants.indexOf(chat.uid) < 0) {
+                            basicBot.room.roulette.participants.push(chat.uid);
+                            API.sendChat(subChat(basicBot.chat.roulettejoin, {name: chat.un}));
                         }
                     }
                 }
@@ -1927,17 +2114,17 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(trapbot.chat.nouserspecified, {name: chat.un}));
+                        if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified, {name: chat.un}));
                         var name = msg.substring(cmd.length + 2);
-                        var user = trapbot.userUtilities.lookupUserName(name);
-                        if (typeof user === 'boolean') return API.sendChat(subChat(trapbot.chat.invaliduserspecified, {name: chat.un}));
-                        var join = trapbot.userUtilities.getJointime(user);
+                        var user = basicBot.userUtilities.lookupUserName(name);
+                        if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified, {name: chat.un}));
+                        var join = basicBot.userUtilities.getJointime(user);
                         var time = Date.now() - join;
-                        var timeString = trapbot.roomUtilities.msToStr(time);
-                        API.sendChat(subChat(trapbot.chat.jointime, {namefrom: chat.un, username: name, time: timeString}));
+                        var timeString = basicBot.roomUtilities.msToStr(time);
+                        API.sendChat(subChat(basicBot.chat.jointime, {namefrom: chat.un, username: name, time: timeString}));
                     }
                 }
             },
@@ -1948,7 +2135,7 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
                         var lastSpace = msg.lastIndexOf(' ');
@@ -1963,18 +2150,18 @@
                             name = msg.substring(cmd.length + 2, lastSpace);
                         }
 
-                        var user = trapbot.userUtilities.lookupUserName(name);
+                        var user = basicBot.userUtilities.lookupUserName(name);
                         var from = chat.un;
-                        if (typeof user === 'boolean') return API.sendChat(subChat(trapbot.chat.nouserspecified, {name: chat.un}));
+                        if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.nouserspecified, {name: chat.un}));
 
-                        var permFrom = trapbot.userUtilities.getPermission(chat.uid);
-                        var permTokick = trapbot.userUtilities.getPermission(user.id);
+                        var permFrom = basicBot.userUtilities.getPermission(chat.uid);
+                        var permTokick = basicBot.userUtilities.getPermission(user.id);
 
                         if (permFrom <= permTokick)
-                            return API.sendChat(subChat(trapbot.chat.kickrank, {name: chat.un}));
+                            return API.sendChat(subChat(basicBot.chat.kickrank, {name: chat.un}));
 
                         if (!isNaN(time)) {
-                            API.sendChat(subChat(trapbot.chat.kick, {name: chat.un, username: name, time: time}));
+                            API.sendChat(subChat(basicBot.chat.kick, {name: chat.un, username: name, time: time}));
                             if (time > 24 * 60 * 60) API.moderateBanUser(user.id, 1, API.BAN.PERMA);
                             else API.moderateBanUser(user.id, 1, API.BAN.DAY);
                             setTimeout(function (id, name) {
@@ -1982,7 +2169,7 @@
                                 console.log('Unbanned @' + name + '. (' + id + ')');
                             }, time * 60 * 1000, user.id, name);
                         }
-                        else API.sendChat(subChat(trapbot.chat.invalidtime, {name: chat.un}));
+                        else API.sendChat(subChat(basicBot.chat.invalidtime, {name: chat.un}));
                     }
                 }
             },
@@ -1993,14 +2180,42 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         storeToStorage();
-                        API.sendChat(trapbot.chat.kill);
-                        trapbot.disconnectAPI();
+                        API.sendChat(basicBot.chat.kill);
+                        basicBot.disconnectAPI();
                         setTimeout(function () {
                             kill();
                         }, 1000);
+                    }
+                }
+            },
+
+            languageCommand: {
+                command: 'language',
+                rank: 'manager',
+                type: 'startsWith',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        var msg = chat.message;
+                        if (msg.length <= cmd.length + 1) return API.sendChat(subChat(basicBot.chat.currentlang, {language: basicBot.settings.language}));
+                        var argument = msg.substring(cmd.length + 1);
+
+                        $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json) {
+                            var langIndex = json;
+                            var link = langIndex[argument.toLowerCase()];
+                            if (typeof link === "undefined") {
+                                API.sendChat(subChat(basicBot.chat.langerror, {link: "http://git.io/vJ9nI"}));
+                            }
+                            else {
+                                basicBot.settings.language = argument;
+                                loadChat();
+                                API.sendChat(subChat(basicBot.chat.langset, {language: basicBot.settings.language}));
+                            }
+                        });
                     }
                 }
             },
@@ -2011,12 +2226,12 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        var ind = trapbot.room.roulette.participants.indexOf(chat.uid);
+                        var ind = basicBot.room.roulette.participants.indexOf(chat.uid);
                         if (ind > -1) {
-                            trapbot.room.roulette.participants.splice(ind, 1);
-                            API.sendChat(subChat(trapbot.chat.rouletteleave, {name: chat.un}));
+                            basicBot.room.roulette.participants.splice(ind, 1);
+                            API.sendChat(subChat(basicBot.chat.rouletteleave, {name: chat.un}));
                         }
                     }
                 }
@@ -2028,23 +2243,23 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var media = API.getMedia();
                         var from = chat.un;
-                        var user = trapbot.userUtilities.lookupUser(chat.uid);
-                        var perm = trapbot.userUtilities.getPermission(chat.uid);
+                        var user = basicBot.userUtilities.lookupUser(chat.uid);
+                        var perm = basicBot.userUtilities.getPermission(chat.uid);
                         var dj = API.getDJ().id;
                         var isDj = false;
                         if (dj === chat.uid) isDj = true;
                         if (perm >= 1 || isDj) {
                             if (media.format === 1) {
-                                var linkToSong = "https://www.youtube.com/watch?v=" + media.cid;
-                                API.sendChat(subChat(trapbot.chat.songlink, {name: from, link: linkToSong}));
+                                var linkToSong = "http://youtu.be/" + media.cid;
+                                API.sendChat(subChat(basicBot.chat.songlink, {name: from, link: linkToSong}));
                             }
                             if (media.format === 2) {
                                 SC.get('/tracks/' + media.cid, function (sound) {
-                                    API.sendChat(subChat(trapbot.chat.songlink, {name: from, link: sound.permalink_url}));
+                                    API.sendChat(subChat(basicBot.chat.songlink, {name: from, link: sound.permalink_url}));
                                 });
                             }
                         }
@@ -2058,9 +2273,9 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        trapbot.roomUtilities.booth.lockBooth();
+                        basicBot.roomUtilities.booth.lockBooth();
                     }
                 }
             },
@@ -2071,14 +2286,14 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        var temp = trapbot.settings.lockdownEnabled;
-                        trapbot.settings.lockdownEnabled = !temp;
-                        if (trapbot.settings.lockdownEnabled) {
-                            return API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.lockdown}));
+                        var temp = basicBot.settings.lockdownEnabled;
+                        basicBot.settings.lockdownEnabled = !temp;
+                        if (basicBot.settings.lockdownEnabled) {
+                            return API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.lockdown}));
                         }
-                        else return API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.lockdown}));
+                        else return API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.lockdown}));
                     }
                 }
             },
@@ -2089,15 +2304,15 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (trapbot.settings.lockGuard) {
-                            trapbot.settings.lockGuard = !trapbot.settings.lockGuard;
-                            return API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.lockdown}));
+                        if (basicBot.settings.lockGuard) {
+                            basicBot.settings.lockGuard = !basicBot.settings.lockGuard;
+                            return API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.lockguard}));
                         }
                         else {
-                            trapbot.settings.lockGuard = !trapbot.settings.lockGuard;
-                            return API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.lockguard}));
+                            basicBot.settings.lockGuard = !basicBot.settings.lockGuard;
+                            return API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.lockguard}));
                         }
                     }
                 }
@@ -2109,29 +2324,29 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (trapbot.room.skippable) {
+                        if (basicBot.room.skippable) {
                             var dj = API.getDJ();
                             var id = dj.id;
                             var name = dj.username;
                             var msgSend = '@' + name + ': ';
-                            trapbot.room.queueable = false;
+                            basicBot.room.queueable = false;
 
                             if (chat.message.length === cmd.length) {
-                                API.sendChat(subChat(trapbot.chat.usedlockskip, {name: chat.un}));
-                                trapbot.roomUtilities.booth.lockBooth();
+                                API.sendChat(subChat(basicBot.chat.usedlockskip, {name: chat.un}));
+                                basicBot.roomUtilities.booth.lockBooth();
                                 setTimeout(function (id) {
                                     API.moderateForceSkip();
-                                    trapbot.room.skippable = false;
+                                    basicBot.room.skippable = false;
                                     setTimeout(function () {
-                                        trapbot.room.skippable = true
+                                        basicBot.room.skippable = true
                                     }, 5 * 1000);
                                     setTimeout(function (id) {
-                                        trapbot.userUtilities.moveUser(id, trapbot.settings.lockskipPosition, false);
-                                        trapbot.room.queueable = true;
+                                        basicBot.userUtilities.moveUser(id, basicBot.settings.lockskipPosition, false);
+                                        basicBot.room.queueable = true;
                                         setTimeout(function () {
-                                            trapbot.roomUtilities.booth.unlockBooth();
+                                            basicBot.roomUtilities.booth.unlockBooth();
                                         }, 1000);
                                     }, 1500, id);
                                 }, 1000, id);
@@ -2140,28 +2355,28 @@
                             var validReason = false;
                             var msg = chat.message;
                             var reason = msg.substring(cmd.length + 1);
-                            for (var i = 0; i < trapbot.settings.lockskipReasons.length; i++) {
-                                var r = trapbot.settings.lockskipReasons[i][0];
+                            for (var i = 0; i < basicBot.settings.lockskipReasons.length; i++) {
+                                var r = basicBot.settings.lockskipReasons[i][0];
                                 if (reason.indexOf(r) !== -1) {
                                     validReason = true;
-                                    msgSend += trapbot.settings.lockskipReasons[i][1];
+                                    msgSend += basicBot.settings.lockskipReasons[i][1];
                                 }
                             }
                             if (validReason) {
-                                API.sendChat(subChat(trapbot.chat.usedlockskip, {name: chat.un}));
-                                trapbot.roomUtilities.booth.lockBooth();
+                                API.sendChat(subChat(basicBot.chat.usedlockskip, {name: chat.un}));
+                                basicBot.roomUtilities.booth.lockBooth();
                                 setTimeout(function (id) {
                                     API.moderateForceSkip();
-                                    trapbot.room.skippable = false;
+                                    basicBot.room.skippable = false;
                                     API.sendChat(msgSend);
                                     setTimeout(function () {
-                                        trapbot.room.skippable = true
+                                        basicBot.room.skippable = true
                                     }, 5 * 1000);
                                     setTimeout(function (id) {
-                                        trapbot.userUtilities.moveUser(id, trapbot.settings.lockskipPosition, false);
-                                        trapbot.room.queueable = true;
+                                        basicBot.userUtilities.moveUser(id, basicBot.settings.lockskipPosition, false);
+                                        basicBot.room.queueable = true;
                                         setTimeout(function () {
-                                            trapbot.roomUtilities.booth.unlockBooth();
+                                            basicBot.roomUtilities.booth.unlockBooth();
                                         }, 1000);
                                     }, 1500, id);
                                 }, 1000, id);
@@ -2178,15 +2393,15 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
                         var pos = msg.substring(cmd.length + 1);
                         if (!isNaN(pos)) {
-                            trapbot.settings.lockskipPosition = pos;
-                            return API.sendChat(subChat(trapbot.chat.lockskippos, {name: chat.un, position: trapbot.settings.lockskipPosition}));
+                            basicBot.settings.lockskipPosition = pos;
+                            return API.sendChat(subChat(basicBot.chat.lockskippos, {name: chat.un, position: basicBot.settings.lockskipPosition}));
                         }
-                        else return API.sendChat(subChat(trapbot.chat.invalidpositionspecified, {name: chat.un}));
+                        else return API.sendChat(subChat(basicBot.chat.invalidpositionspecified, {name: chat.un}));
                     }
                 }
             },
@@ -2197,15 +2412,31 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
                         var lockTime = msg.substring(cmd.length + 1);
                         if (!isNaN(lockTime) && lockTime !== "") {
-                            trapbot.settings.maximumLocktime = lockTime;
-                            return API.sendChat(subChat(trapbot.chat.lockguardtime, {name: chat.un, time: trapbot.settings.maximumLocktime}));
+                            basicBot.settings.maximumLocktime = lockTime;
+                            return API.sendChat(subChat(basicBot.chat.lockguardtime, {name: chat.un, time: basicBot.settings.maximumLocktime}));
                         }
-                        else return API.sendChat(subChat(trapbot.chat.invalidtime, {name: chat.un}));
+                        else return API.sendChat(subChat(basicBot.chat.invalidtime, {name: chat.un}));
+                    }
+                }
+            },
+
+            logoutCommand: {
+                command: 'logout',
+                rank: 'manager',
+                type: 'exact',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        API.sendChat(subChat(basicBot.chat.logout, {name: chat.un, botname: basicBot.settings.botName}));
+                        setTimeout(function () {
+                            $(".logout").mousedown()
+                        }, 1000);
                     }
                 }
             },
@@ -2216,15 +2447,15 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
                         var maxTime = msg.substring(cmd.length + 1);
                         if (!isNaN(maxTime)) {
-                            trapbot.settings.maximumSongLength = maxTime;
-                            return API.sendChat(subChat(trapbot.chat.maxlengthtime, {name: chat.un, time: trapbot.settings.maximumSongLength}));
+                            basicBot.settings.maximumSongLength = maxTime;
+                            return API.sendChat(subChat(basicBot.chat.maxlengthtime, {name: chat.un, time: basicBot.settings.maximumSongLength}));
                         }
-                        else return API.sendChat(subChat(trapbot.chat.invalidtime, {name: chat.un}));
+                        else return API.sendChat(subChat(basicBot.chat.invalidtime, {name: chat.un}));
                     }
                 }
             },
@@ -2235,19 +2466,19 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (msg.length <= cmd.length + 1) return API.sendChat('/me MotD: ' + trapbot.settings.motd);
+                        if (msg.length <= cmd.length + 1) return API.sendChat('/me MotD: ' + basicBot.settings.motd);
                         var argument = msg.substring(cmd.length + 1);
-                        if (!trapbot.settings.motdEnabled) trapbot.settings.motdEnabled = !trapbot.settings.motdEnabled;
+                        if (!basicBot.settings.motdEnabled) basicBot.settings.motdEnabled = !basicBot.settings.motdEnabled;
                         if (isNaN(argument)) {
-                            trapbot.settings.motd = argument;
-                            API.sendChat(subChat(trapbot.chat.motdset, {msg: trapbot.settings.motd}));
+                            basicBot.settings.motd = argument;
+                            API.sendChat(subChat(basicBot.chat.motdset, {msg: basicBot.settings.motd}));
                         }
                         else {
-                            trapbot.settings.motdInterval = argument;
-                            API.sendChat(subChat(trapbot.chat.motdintervalset, {interval: trapbot.settings.motdInterval}));
+                            basicBot.settings.motdInterval = argument;
+                            API.sendChat(subChat(basicBot.chat.motdintervalset, {interval: basicBot.settings.motdInterval}));
                         }
                     }
                 }
@@ -2259,10 +2490,10 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(trapbot.chat.nouserspecified, {name: chat.un}));
+                        if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified, {name: chat.un}));
                         var firstSpace = msg.indexOf(' ');
                         var lastSpace = msg.lastIndexOf(' ');
                         var pos;
@@ -2275,13 +2506,13 @@
                             pos = parseInt(msg.substring(lastSpace + 1));
                             name = msg.substring(cmd.length + 2, lastSpace);
                         }
-                        var user = trapbot.userUtilities.lookupUserName(name);
-                        if (typeof user === 'boolean') return API.sendChat(subChat(trapbot.chat.invaliduserspecified, {name: chat.un}));
-                        if (user.id === trapbot.loggedInID) return API.sendChat(subChat(trapbot.chat.addbotwaitlist, {name: chat.un}));
+                        var user = basicBot.userUtilities.lookupUserName(name);
+                        if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified, {name: chat.un}));
+                        if (user.id === basicBot.loggedInID) return API.sendChat(subChat(basicBot.chat.addbotwaitlist, {name: chat.un}));
                         if (!isNaN(pos)) {
-                            API.sendChat(subChat(trapbot.chat.move, {name: chat.un}));
-                            trapbot.userUtilities.moveUser(user.id, pos, false);
-                        } else return API.sendChat(subChat(trapbot.chat.invalidpositionspecified, {name: chat.un}));
+                            API.sendChat(subChat(basicBot.chat.move, {name: chat.un}));
+                            basicBot.userUtilities.moveUser(user.id, pos, false);
+                        } else return API.sendChat(subChat(basicBot.chat.invalidpositionspecified, {name: chat.un}));
                     }
                 }
             },
@@ -2292,10 +2523,10 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(trapbot.chat.nouserspecified, {name: chat.un}));
+                        if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified, {name: chat.un}));
                         var lastSpace = msg.lastIndexOf(' ');
                         var time = null;
                         var name;
@@ -2306,23 +2537,23 @@
                         else {
                             time = msg.substring(lastSpace + 1);
                             if (isNaN(time) || time == "" || time == null || typeof time == "undefined") {
-                                return API.sendChat(subChat(trapbot.chat.invalidtime, {name: chat.un}));
+                                return API.sendChat(subChat(basicBot.chat.invalidtime, {name: chat.un}));
                             }
                             name = msg.substring(cmd.length + 2, lastSpace);
                         }
                         var from = chat.un;
-                        var user = trapbot.userUtilities.lookupUserName(name);
-                        if (typeof user === 'boolean') return API.sendChat(subChat(trapbot.chat.invaliduserspecified, {name: chat.un}));
-                        var permFrom = trapbot.userUtilities.getPermission(chat.uid);
-                        var permUser = trapbot.userUtilities.getPermission(user.id);
+                        var user = basicBot.userUtilities.lookupUserName(name);
+                        if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified, {name: chat.un}));
+                        var permFrom = basicBot.userUtilities.getPermission(chat.uid);
+                        var permUser = basicBot.userUtilities.getPermission(user.id);
                         if (permFrom > permUser) {
                             /*
-                             trapbot.room.mutedUsers.push(user.id);
-                             if (time === null) API.sendChat(subChat(trapbot.chat.mutednotime, {name: chat.un, username: name}));
+                             basicBot.room.mutedUsers.push(user.id);
+                             if (time === null) API.sendChat(subChat(basicBot.chat.mutednotime, {name: chat.un, username: name}));
                              else {
-                             API.sendChat(subChat(trapbot.chat.mutedtime, {name: chat.un, username: name, time: time}));
+                             API.sendChat(subChat(basicBot.chat.mutedtime, {name: chat.un, username: name, time: time}));
                              setTimeout(function (id) {
-                             var muted = trapbot.room.mutedUsers;
+                             var muted = basicBot.room.mutedUsers;
                              var wasMuted = false;
                              var indexMuted = -1;
                              for (var i = 0; i < muted.length; i++) {
@@ -2332,46 +2563,46 @@
                              }
                              }
                              if (indexMuted > -1) {
-                             trapbot.room.mutedUsers.splice(indexMuted);
-                             var u = trapbot.userUtilities.lookupUser(id);
+                             basicBot.room.mutedUsers.splice(indexMuted);
+                             var u = basicBot.userUtilities.lookupUser(id);
                              var name = u.username;
-                             API.sendChat(subChat(trapbot.chat.unmuted, {name: chat.un, username: name}));
+                             API.sendChat(subChat(basicBot.chat.unmuted, {name: chat.un, username: name}));
                              }
                              }, time * 60 * 1000, user.id);
                              }
                              */
                             if (time > 45) {
-                                API.sendChat(subChat(trapbot.chat.mutedmaxtime, {name: chat.un, time: "45"}));
+                                API.sendChat(subChat(basicBot.chat.mutedmaxtime, {name: chat.un, time: "45"}));
                                 API.moderateMuteUser(user.id, 1, API.MUTE.LONG);
                             }
                             else if (time === 45) {
                                 API.moderateMuteUser(user.id, 1, API.MUTE.LONG);
-                                API.sendChat(subChat(trapbot.chat.mutedtime, {name: chat.un, username: name, time: time}));
+                                API.sendChat(subChat(basicBot.chat.mutedtime, {name: chat.un, username: name, time: time}));
 
                             }
                             else if (time > 30) {
                                 API.moderateMuteUser(user.id, 1, API.MUTE.LONG);
-                                API.sendChat(subChat(trapbot.chat.mutedtime, {name: chat.un, username: name, time: time}));
+                                API.sendChat(subChat(basicBot.chat.mutedtime, {name: chat.un, username: name, time: time}));
                                 setTimeout(function (id) {
                                     API.moderateUnmuteUser(id);
                                 }, time * 60 * 1000, user.id);
                             }
                             else if (time > 15) {
                                 API.moderateMuteUser(user.id, 1, API.MUTE.MEDIUM);
-                                API.sendChat(subChat(trapbot.chat.mutedtime, {name: chat.un, username: name, time: time}));
+                                API.sendChat(subChat(basicBot.chat.mutedtime, {name: chat.un, username: name, time: time}));
                                 setTimeout(function (id) {
                                     API.moderateUnmuteUser(id);
                                 }, time * 60 * 1000, user.id);
                             }
                             else {
                                 API.moderateMuteUser(user.id, 1, API.MUTE.SHORT);
-                                API.sendChat(subChat(trapbot.chat.mutedtime, {name: chat.un, username: name, time: time}));
+                                API.sendChat(subChat(basicBot.chat.mutedtime, {name: chat.un, username: name, time: time}));
                                 setTimeout(function (id) {
                                     API.moderateUnmuteUser(id);
                                 }, time * 60 * 1000, user.id);
                             }
                         }
-                        else API.sendChat(subChat(trapbot.chat.muterank, {name: chat.un}));
+                        else API.sendChat(subChat(basicBot.chat.muterank, {name: chat.un}));
                     }
                 }
             },
@@ -2382,9 +2613,10 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                            return API.sendChat(subChat(trapbot.chat.oplist, {link: trapbot.settings.opLink}));
+                        if (typeof basicBot.settings.opLink === "string")
+                            return API.sendChat(subChat(basicBot.chat.oplist, {link: basicBot.settings.opLink}));
                     }
                 }
             },
@@ -2395,9 +2627,9 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        API.sendChat(trapbot.chat.pong)
+                        API.sendChat(basicBot.chat.pong)
                     }
                 }
             },
@@ -2408,10 +2640,10 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         storeToStorage();
-                        trapbot.disconnectAPI();
+                        basicBot.disconnectAPI();
                         setTimeout(function () {
                             window.location.reload(false);
                         }, 1000);
@@ -2426,14 +2658,14 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        API.sendChat(trapbot.chat.reload);
+                        API.sendChat(basicBot.chat.reload);
                         storeToStorage();
-                        trapbot.disconnectAPI();
+                        basicBot.disconnectAPI();
                         kill();
                         setTimeout(function () {
-                            $.getScript(trapbot.scriptLink);
+                            $.getScript(basicBot.scriptLink);
                         }, 2000);
                     }
                 }
@@ -2445,12 +2677,12 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
                         if (msg.length > cmd.length + 2) {
                             var name = msg.substr(cmd.length + 2);
-                            var user = trapbot.userUtilities.lookupUserName(name);
+                            var user = basicBot.userUtilities.lookupUserName(name);
                             if (typeof user !== 'boolean') {
                                 user.lastDC = {
                                     time: null,
@@ -2464,8 +2696,8 @@
                                     }, 1 * 1000, user);
                                 }
                                 else API.moderateRemoveDJ(user.id);
-                            } else API.sendChat(subChat(trapbot.chat.removenotinwl, {name: chat.un, username: name}));
-                        } else API.sendChat(subChat(trapbot.chat.nouserspecified, {name: chat.un}));
+                            } else API.sendChat(subChat(basicBot.chat.removenotinwl, {name: chat.un, username: name}));
+                        } else API.sendChat(subChat(basicBot.chat.nouserspecified, {name: chat.un}));
                     }
                 }
             },
@@ -2476,15 +2708,15 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (trapbot.settings.etaRestriction) {
-                            trapbot.settings.etaRestriction = !trapbot.settings.etaRestriction;
-                            return API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.etarestriction}));
+                        if (basicBot.settings.etaRestriction) {
+                            basicBot.settings.etaRestriction = !basicBot.settings.etaRestriction;
+                            return API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.etarestriction}));
                         }
                         else {
-                            trapbot.settings.etaRestriction = !trapbot.settings.etaRestriction;
-                            return API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.etarestriction}));
+                            basicBot.settings.etaRestriction = !basicBot.settings.etaRestriction;
+                            return API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.etarestriction}));
                         }
                     }
                 }
@@ -2496,10 +2728,10 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (!trapbot.room.roulette.rouletteStatus) {
-                            trapbot.room.roulette.startRoulette();
+                        if (!basicBot.room.roulette.rouletteStatus) {
+                            basicBot.room.roulette.startRoulette();
                         }
                     }
                 }
@@ -2511,9 +2743,10 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                            return API.sendChat(subChat(trapbot.chat.roomrules, {link: trapbot.settings.rulesLink}));
+                        if (typeof basicBot.settings.rulesLink === "string")
+                            return API.sendChat(subChat(basicBot.chat.roomrules, {link: basicBot.settings.rulesLink}));
                     }
                 }
             },
@@ -2524,13 +2757,13 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var from = chat.un;
-                        var woots = trapbot.room.roomstats.totalWoots;
-                        var mehs = trapbot.room.roomstats.totalMehs;
-                        var grabs = trapbot.room.roomstats.totalCurates;
-                        API.sendChat(subChat(trapbot.chat.sessionstats, {name: from, woots: woots, mehs: mehs, grabs: grabs}));
+                        var woots = basicBot.room.roomstats.totalWoots;
+                        var mehs = basicBot.room.roomstats.totalMehs;
+                        var grabs = basicBot.room.roomstats.totalCurates;
+                        API.sendChat(subChat(basicBot.chat.sessionstats, {name: from, woots: woots, mehs: mehs, grabs: grabs}));
                     }
                 }
             },
@@ -2541,13 +2774,13 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        API.sendChat(subChat(trapbot.chat.skip, {name: chat.un}));
+                        API.sendChat(subChat(basicBot.chat.skip, {name: chat.un}));
                         API.moderateForceSkip();
-                        trapbot.room.skippable = false;
+                        basicBot.room.skippable = false;
                         setTimeout(function () {
-                            trapbot.room.skippable = true
+                            basicBot.room.skippable = true
                         }, 5 * 1000);
 
                     }
@@ -2560,15 +2793,15 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (trapbot.settings.songstats) {
-                            trapbot.settings.songstats = !trapbot.settings.songstats;
-                            return API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.songstats}));
+                        if (basicBot.settings.songstats) {
+                            basicBot.settings.songstats = !basicBot.settings.songstats;
+                            return API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.songstats}));
                         }
                         else {
-                            trapbot.settings.songstats = !trapbot.settings.songstats;
-                            return API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.songstats}));
+                            basicBot.settings.songstats = !basicBot.settings.songstats;
+                            return API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.songstats}));
                         }
                     }
                 }
@@ -2580,9 +2813,9 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        API.sendChat('/me This bot was made by ' + botCreator + '.');
+                        API.sendChat('/me This bot was created by ' + botCreator + ', but is now maintained by ' + botMaintainer + ".");
                     }
                 }
             },
@@ -2593,57 +2826,72 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var from = chat.un;
                         var msg = '/me [@' + from + '] ';
 
-                        msg += trapbot.chat.afkremoval + ': ';
-                        if (trapbot.settings.afkRemoval) msg += 'ON';
+                        msg += basicBot.chat.afkremoval + ': ';
+                        if (basicBot.settings.afkRemoval) msg += 'ON';
                         else msg += 'OFF';
                         msg += '. ';
-                        msg += trapbot.chat.afksremoved + ": " + trapbot.room.afkList.length + '. ';
-                        msg += trapbot.chat.afklimit + ': ' + trapbot.settings.maximumAfk + '. ';
+                        msg += basicBot.chat.afksremoved + ": " + basicBot.room.afkList.length + '. ';
+                        msg += basicBot.chat.afklimit + ': ' + basicBot.settings.maximumAfk + '. ';
 
                         msg += 'Bouncer+: ';
-                        if (trapbot.settings.bouncerPlus) msg += 'ON';
+                        if (basicBot.settings.bouncerPlus) msg += 'ON';
                         else msg += 'OFF';
                         msg += '. ';
 												
-                        msg += trapbot.chat.blacklist + ': ';
-                        if (trapbot.settings.blacklistEnabled) msg += 'ON';
+                        msg += basicBot.chat.blacklist + ': ';
+                        if (basicBot.settings.blacklistEnabled) msg += 'ON';
                         else msg += 'OFF';
                         msg += '. ';
 
-                        msg += trapbot.chat.lockguard + ': ';
-                        if (trapbot.settings.lockGuard) msg += 'ON';
+                        msg += basicBot.chat.lockguard + ': ';
+                        if (basicBot.settings.lockGuard) msg += 'ON';
                         else msg += 'OFF';
                         msg += '. ';
 
-                        msg += trapbot.chat.cycleguard + ': ';
-                        if (trapbot.settings.cycleGuard) msg += 'ON';
+                        msg += basicBot.chat.cycleguard + ': ';
+                        if (basicBot.settings.cycleGuard) msg += 'ON';
                         else msg += 'OFF';
                         msg += '. ';
 
-                        msg += trapbot.chat.timeguard + ': ';
-                        if (trapbot.settings.timeGuard) msg += 'ON';
+                        msg += basicBot.chat.timeguard + ': ';
+                        if (basicBot.settings.timeGuard) msg += 'ON';
                         else msg += 'OFF';
                         msg += '. ';
 
-                        msg += trapbot.chat.chatfilter + ': ';
-                        if (trapbot.settings.filterChat) msg += 'ON';
+                        msg += basicBot.chat.chatfilter + ': ';
+                        if (basicBot.settings.filterChat) msg += 'ON';
                         else msg += 'OFF';
                         msg += '. ';
 
-                        msg += trapbot.chat.voteskip + ': ';
-                        if (trapbot.settings.voteskip) msg += 'ON';
+                        msg += basicBot.chat.historyskip + ': ';
+                        if (basicBot.settings.historySkip) msg += 'ON';
                         else msg += 'OFF';
                         msg += '. ';
 
-                        var launchT = trapbot.room.roomstats.launchTime;
+                        msg += basicBot.chat.voteskip + ': ';
+                        if (basicBot.settings.voteSkip) msg += 'ON';
+                        else msg += 'OFF';
+                        msg += '. ';
+
+                        msg += basicBot.chat.cmddeletion + ': ';
+                        if (basicBot.settings.cmdDeletion) msg += 'ON';
+                        else msg += 'OFF';
+                        msg += '. ';
+
+                        msg += basicBot.chat.autoskip + ': ';
+                        if (basicBot.room.autoskip) msg += 'ON';
+                        else msg += 'OFF';
+                        msg += '. ';
+                        
+                        var launchT = basicBot.room.roomstats.launchTime;
                         var durationOnline = Date.now() - launchT;
-                        var since = trapbot.roomUtilities.msToStr(durationOnline);
-                        msg += subChat(trapbot.chat.activefor, {time: since});
+                        var since = basicBot.roomUtilities.msToStr(durationOnline);
+                        msg += subChat(basicBot.chat.activefor, {time: since});
 
                         return API.sendChat(msg);
                     }
@@ -2656,32 +2904,32 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(trapbot.chat.nouserspecified, {name: chat.un}));
+                        if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified, {name: chat.un}));
                         var firstSpace = msg.indexOf(' ');
                         var lastSpace = msg.lastIndexOf(' ');
                         var name1 = msg.substring(cmd.length + 2, lastSpace);
                         var name2 = msg.substring(lastSpace + 2);
-                        var user1 = trapbot.userUtilities.lookupUserName(name1);
-                        var user2 = trapbot.userUtilities.lookupUserName(name2);
-                        if (typeof user1 === 'boolean' || typeof user2 === 'boolean') return API.sendChat(subChat(trapbot.chat.swapinvalid, {name: chat.un}));
-                        if (user1.id === trapbot.loggedInID || user2.id === trapbot.loggedInID) return API.sendChat(subChat(trapbot.chat.addbottowaitlist, {name: chat.un}));
+                        var user1 = basicBot.userUtilities.lookupUserName(name1);
+                        var user2 = basicBot.userUtilities.lookupUserName(name2);
+                        if (typeof user1 === 'boolean' || typeof user2 === 'boolean') return API.sendChat(subChat(basicBot.chat.swapinvalid, {name: chat.un}));
+                        if (user1.id === basicBot.loggedInID || user2.id === basicBot.loggedInID) return API.sendChat(subChat(basicBot.chat.addbottowaitlist, {name: chat.un}));
                         var p1 = API.getWaitListPosition(user1.id) + 1;
                         var p2 = API.getWaitListPosition(user2.id) + 1;
-                        if (p1 < 0 || p2 < 0) return API.sendChat(subChat(trapbot.chat.swapwlonly, {name: chat.un}));
-                        API.sendChat(subChat(trapbot.chat.swapping, {'name1': name1, 'name2': name2}));
+                        if (p1 < 0 || p2 < 0) return API.sendChat(subChat(basicBot.chat.swapwlonly, {name: chat.un}));
+                        API.sendChat(subChat(basicBot.chat.swapping, {'name1': name1, 'name2': name2}));
                         if (p1 < p2) {
-                            trapbot.userUtilities.moveUser(user2.id, p1, false);
+                            basicBot.userUtilities.moveUser(user2.id, p1, false);
                             setTimeout(function (user1, p2) {
-                                trapbot.userUtilities.moveUser(user1.id, p2, false);
+                                basicBot.userUtilities.moveUser(user1.id, p2, false);
                             }, 2000, user1, p2);
                         }
                         else {
-                            trapbot.userUtilities.moveUser(user1.id, p2, false);
+                            basicBot.userUtilities.moveUser(user1.id, p2, false);
                             setTimeout(function (user2, p1) {
-                                trapbot.userUtilities.moveUser(user2.id, p1, false);
+                                basicBot.userUtilities.moveUser(user2.id, p1, false);
                             }, 2000, user2, p1);
                         }
                     }
@@ -2694,10 +2942,10 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (typeof trapbot.settings.themeLink === "string")
-                            API.sendChat(subChat(trapbot.chat.genres, {link: trapbot.settings.themeLink}));
+                        if (typeof basicBot.settings.themeLink === "string")
+                            API.sendChat(subChat(basicBot.chat.genres, {link: basicBot.settings.themeLink}));
                     }
                 }
             },
@@ -2708,15 +2956,15 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (trapbot.settings.timeGuard) {
-                            trapbot.settings.timeGuard = !trapbot.settings.timeGuard;
-                            return API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.timeguard}));
+                        if (basicBot.settings.timeGuard) {
+                            basicBot.settings.timeGuard = !basicBot.settings.timeGuard;
+                            return API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.timeguard}));
                         }
                         else {
-                            trapbot.settings.timeGuard = !trapbot.settings.timeGuard;
-                            return API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.timeguard}));
+                            basicBot.settings.timeGuard = !basicBot.settings.timeGuard;
+                            return API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.timeguard}));
                         }
 
                     }
@@ -2729,14 +2977,14 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        var temp = trapbot.settings.blacklistEnabled;
-                        trapbot.settings.blacklistEnabled = !temp;
-                        if (trapbot.settings.blacklistEnabled) {
-                          return API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.blacklist}));
+                        var temp = basicBot.settings.blacklistEnabled;
+                        basicBot.settings.blacklistEnabled = !temp;
+                        if (basicBot.settings.blacklistEnabled) {
+                          return API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.blacklist}));
                         }
-                        else return API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.blacklist}));
+                        else return API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.blacklist}));
                     }
                 }
             },
@@ -2747,15 +2995,35 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (trapbot.settings.motdEnabled) {
-                            trapbot.settings.motdEnabled = !trapbot.settings.motdEnabled;
-                            API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.motd}));
+                        if (basicBot.settings.motdEnabled) {
+                            basicBot.settings.motdEnabled = !basicBot.settings.motdEnabled;
+                            API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.motd}));
                         }
                         else {
-                            trapbot.settings.motdEnabled = !trapbot.settings.motdEnabled;
-                            API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.motd}));
+                            basicBot.settings.motdEnabled = !basicBot.settings.motdEnabled;
+                            API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.motd}));
+                        }
+                    }
+                }
+            },
+
+            togglevoteskipCommand: {
+                command: 'togglevoteskip',
+                rank: 'bouncer',
+                type: 'exact',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        if (basicBot.settings.voteSkip) {
+                            basicBot.settings.voteSkip = !basicBot.settings.voteSkip;
+                            API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.voteskip}));
+                        }
+                        else {
+                            basicBot.settings.voteSkip = !basicBot.settings.voteSkip;
+                            API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.voteskip}));
                         }
                     }
                 }
@@ -2767,7 +3035,7 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         $(".icon-population").click();
                         $(".icon-ban").click();
@@ -2787,7 +3055,7 @@
                             }
                             if (!found) {
                                 $(".icon-chat").click();
-                                return API.sendChat(subChat(trapbot.chat.notbanned, {name: chat.un}));
+                                return API.sendChat(subChat(basicBot.chat.notbanned, {name: chat.un}));
                             }
                             API.moderateUnbanUser(bannedUser.id);
                             console.log("Unbanned " + name);
@@ -2805,9 +3073,9 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        trapbot.roomUtilities.booth.unlockBooth();
+                        basicBot.roomUtilities.booth.unlockBooth();
                     }
                 }
             },
@@ -2818,30 +3086,30 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        var permFrom = trapbot.userUtilities.getPermission(chat.uid);
+                        var permFrom = basicBot.userUtilities.getPermission(chat.uid);
                         /**
                          if (msg.indexOf('@') === -1 && msg.indexOf('all') !== -1) {
                             if (permFrom > 2) {
-                                trapbot.room.mutedUsers = [];
-                                return API.sendChat(subChat(trapbot.chat.unmutedeveryone, {name: chat.un}));
+                                basicBot.room.mutedUsers = [];
+                                return API.sendChat(subChat(basicBot.chat.unmutedeveryone, {name: chat.un}));
                             }
-                            else return API.sendChat(subChat(trapbot.chat.unmuteeveryonerank, {name: chat.un}));
+                            else return API.sendChat(subChat(basicBot.chat.unmuteeveryonerank, {name: chat.un}));
                         }
                          **/
                         var from = chat.un;
                         var name = msg.substr(cmd.length + 2);
 
-                        var user = trapbot.userUtilities.lookupUserName(name);
+                        var user = basicBot.userUtilities.lookupUserName(name);
 
-                        if (typeof user === 'boolean') return API.sendChat(subChat(trapbot.chat.invaliduserspecified, {name: chat.un}));
+                        if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified, {name: chat.un}));
 
-                        var permUser = trapbot.userUtilities.getPermission(user.id);
+                        var permUser = basicBot.userUtilities.getPermission(user.id);
                         if (permFrom > permUser) {
                             /*
-                             var muted = trapbot.room.mutedUsers;
+                             var muted = basicBot.room.mutedUsers;
                              var wasMuted = false;
                              var indexMuted = -1;
                              for (var i = 0; i < muted.length; i++) {
@@ -2850,19 +3118,19 @@
                              wasMuted = true;
                              }
                              }
-                             if (!wasMuted) return API.sendChat(subChat(trapbot.chat.notmuted, {name: chat.un}));
-                             trapbot.room.mutedUsers.splice(indexMuted);
-                             API.sendChat(subChat(trapbot.chat.unmuted, {name: chat.un, username: name}));
+                             if (!wasMuted) return API.sendChat(subChat(basicBot.chat.notmuted, {name: chat.un}));
+                             basicBot.room.mutedUsers.splice(indexMuted);
+                             API.sendChat(subChat(basicBot.chat.unmuted, {name: chat.un, username: name}));
                              */
                             try {
                                 API.moderateUnmuteUser(user.id);
-                                API.sendChat(subChat(trapbot.chat.unmuted, {name: chat.un, username: name}));
+                                API.sendChat(subChat(basicBot.chat.unmuted, {name: chat.un, username: name}));
                             }
                             catch (e) {
-                                API.sendChat(subChat(trapbot.chat.notmuted, {name: chat.un}));
+                                API.sendChat(subChat(basicBot.chat.notmuted, {name: chat.un}));
                             }
                         }
-                        else API.sendChat(subChat(trapbot.chat.unmuterank, {name: chat.un}));
+                        else API.sendChat(subChat(basicBot.chat.unmuterank, {name: chat.un}));
                     }
                 }
             },
@@ -2873,15 +3141,15 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
                         var cd = msg.substring(cmd.length + 1);
                         if (!isNaN(cd)) {
-                            trapbot.settings.commandCooldown = cd;
-                            return API.sendChat(subChat(trapbot.chat.commandscd, {name: chat.un, time: trapbot.settings.commandCooldown}));
+                            basicBot.settings.commandCooldown = cd;
+                            return API.sendChat(subChat(basicBot.chat.commandscd, {name: chat.un, time: basicBot.settings.commandCooldown}));
                         }
-                        else return API.sendChat(subChat(trapbot.chat.invalidtime, {name: chat.un}));
+                        else return API.sendChat(subChat(basicBot.chat.invalidtime, {name: chat.un}));
                     }
                 }
             },
@@ -2892,15 +3160,15 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (trapbot.settings.usercommandsEnabled) {
-                            API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.usercommands}));
-                            trapbot.settings.usercommandsEnabled = !trapbot.settings.usercommandsEnabled;
+                        if (basicBot.settings.usercommandsEnabled) {
+                            API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.usercommands}));
+                            basicBot.settings.usercommandsEnabled = !basicBot.settings.usercommandsEnabled;
                         }
                         else {
-                            API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.usercommands}));
-                            trapbot.settings.usercommandsEnabled = !trapbot.settings.usercommandsEnabled;
+                            API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.usercommands}));
+                            basicBot.settings.usercommandsEnabled = !basicBot.settings.usercommandsEnabled;
                         }
                     }
                 }
@@ -2912,16 +3180,39 @@
                 type: 'startsWith',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
                         var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(trapbot.chat.nouserspecified, {name: chat.un}));
+                        if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified, {name: chat.un}));
                         var name = msg.substring(cmd.length + 2);
-                        var user = trapbot.userUtilities.lookupUserName(name);
-                        if (user === false) return API.sendChat(subChat(trapbot.chat.invaliduserspecified, {name: chat.un}));
+                        var user = basicBot.userUtilities.lookupUserName(name);
+                        if (user === false) return API.sendChat(subChat(basicBot.chat.invaliduserspecified, {name: chat.un}));
                         var vratio = user.votes;
                         var ratio = vratio.woot / vratio.meh;
-                        API.sendChat(subChat(trapbot.chat.voteratio, {name: chat.un, username: name, woot: vratio.woot, mehs: vratio.meh, ratio: ratio.toFixed(2)}));
+                        API.sendChat(subChat(basicBot.chat.voteratio, {name: chat.un, username: name, woot: vratio.woot, mehs: vratio.meh, ratio: ratio.toFixed(2)}));
+                    }
+                }
+            },
+
+            voteskipCommand: {
+                command: 'voteskip',
+                rank: 'manager',
+                type: 'startsWith',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        var msg = chat.message;
+                        if (msg.length <= cmd.length + 1) return API.sendChat(subChat(basicBot.chat.voteskiplimit, {name: chat.un, limit: basicBot.settings.voteSkipLimit}));
+                        var argument = msg.substring(cmd.length + 1);
+                        if (!basicBot.settings.voteSkip) basicBot.settings.voteSkip = !basicBot.settings.voteSkip;
+                        if (isNaN(argument)) {
+                            API.sendChat(subChat(basicBot.chat.voteskipinvalidlimit, {name: chat.un}));
+                        }
+                        else {
+                            basicBot.settings.voteSkipLimit = argument;
+                            API.sendChat(subChat(basicBot.chat.voteskipsetlimit, {name: chat.un, limit: basicBot.settings.voteSkipLimit}));
+                        }
                     }
                 }
             },
@@ -2932,15 +3223,15 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (trapbot.settings.welcome) {
-                            trapbot.settings.welcome = !trapbot.settings.welcome;
-                            return API.sendChat(subChat(trapbot.chat.toggleoff, {name: chat.un, 'function': trapbot.chat.welcomemsg}));
+                        if (basicBot.settings.welcome) {
+                            basicBot.settings.welcome = !basicBot.settings.welcome;
+                            return API.sendChat(subChat(basicBot.chat.toggleoff, {name: chat.un, 'function': basicBot.chat.welcomemsg}));
                         }
                         else {
-                            trapbot.settings.welcome = !trapbot.settings.welcome;
-                            return API.sendChat(subChat(trapbot.chat.toggleon, {name: chat.un, 'function': trapbot.chat.welcomemsg}));
+                            basicBot.settings.welcome = !basicBot.settings.welcome;
+                            return API.sendChat(subChat(basicBot.chat.toggleon, {name: chat.un, 'function': basicBot.chat.welcomemsg}));
                         }
                     }
                 }
@@ -2952,9 +3243,97 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                            API.sendChat(subChat(trapbot.chat.website, {link: trapbot.settings.website}));
+                        if (typeof basicBot.settings.website === "string")
+                            API.sendChat(subChat(basicBot.chat.website, {link: basicBot.settings.website}));
+                    }
+                }
+            },
+
+            whoisCommand: {
+                command: 'whois',
+                rank: 'bouncer',
+                type: 'startsWith',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        var msg = chat.message;
+                        var name;
+                        if (msg.length === cmd.length) name = chat.un;
+                        else {
+                            name = msg.substr(cmd.length + 2);
+                        }
+                        users = API.getUsers();
+                        var len = users.length;
+                        for (var i = 0; i < len; ++i){
+                            if (users[i].username == name){
+                                var id = users[i].id;
+                                var avatar = API.getUser(id).avatarID;
+                                var level = API.getUser(id).level;
+                                var rawjoined = API.getUser(id).joined;
+                                var joined = rawjoined.substr(0, 10);
+                                var rawlang = API.getUser(id).language;
+                                if (rawlang == "en"){
+                                    var language = "English";
+                                } else if (rawlang == "bg"){
+                                    var language = "Bulgarian";
+                                } else if (rawlang == "cs"){
+                                    var language = "Czech";
+                                } else if (rawlang == "fi"){
+                                    var language = "Finnish"
+                                } else if (rawlang == "fr"){
+                                    var language = "French"
+                                } else if (rawlang == "pt"){
+                                    var language = "Portuguese"
+                                } else if (rawlang == "zh"){
+                                    var language = "Chinese"
+                                } else if (rawlang == "sk"){
+                                    var language = "Slovak"
+                                } else if (rawlang == "nl"){
+                                    var language = "Dutch"
+                                } else if (rawlang == "ms"){
+                                    var language = "Malay"
+                                }
+                                var rawstatus = API.getUser(id).status;
+                                if (rawstatus == "0"){
+                                    var status = "Available";
+                                } else if (rawstatus == "1"){
+                                    var status = "Away";
+                                } else if (rawstatus == "2"){
+                                    var status = "Working";
+                                } else if (rawstatus == "3"){
+                                    var status = "Gaming"
+                                }
+                                var rawrank = API.getUser(id).role;
+                                if (rawrank == "0"){
+                                    var rank = "User";
+                                } else if (rawrank == "1"){
+                                    var rank = "Resident DJ";
+                                } else if (rawrank == "2"){
+                                    var rank = "Bouncer";
+                                } else if (rawrank == "3"){
+                                    var rank = "Manager"
+                                } else if (rawrank == "4"){
+                                    var rank = "Co-Host"
+                                } else if (rawrank == "5"){
+                                    var rank = "Host"
+                                } else if (rawrank == "7"){
+                                    var rank = "Brand Ambassador"
+                                } else if (rawrank == "10"){
+                                    var rank = "Admin"
+                                }
+                                var slug = API.getUser(id).slug;
+                                if (typeof slug !== 'undefined') {
+                                    var profile = ", Profile: http://plug.dj/@/" + slug;
+                                } else {
+                                    var profile = "";
+                                }
+
+                                API.sendChat(subChat(basicBot.chat.whois, {name1: chat.un, name2: name, id: id, avatar: avatar, profile: profile, language: language, level: level, status: status, joined: joined, rank: rank}));
+                            }
+                        }
                     }
                 }
             },
@@ -2965,34 +3344,15 @@
                 type: 'exact',
                 functionality: function (chat, cmd) {
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
                     else {
-                        if (typeof trapbot.settings.youtubeLink === "string")
-                            API.sendChat(subChat(trapbot.chat.youtube, {name: chat.un, link: trapbot.settings.youtubeLink}));
-                    } 
-                }
-            },
-
-            ballCommand: {
-                command: ['8ball', 'ask'],
-                rank: 'user',
-                type: 'startsWith',
-                functionality: function (chat, cmd) {
-                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
-                    else {
-                            var crowd = API.getUsers();
-                            var msg = chat.message;
-                            var argument = msg.substring(cmd.length + 1);
-                            var randomUser = Math.floor(Math.random() * crowd.length);
-                            var randomBall = Math.floor(Math.random() * trapbot.settings.ball.length);
-                            var randomSentence = Math.floor(Math.random() * 1);
-                            API.sendChat(subChat(trapbot.chat.ball, {name: chat.un, botname: trapbot.settings.botName, question: argument, response: trapbot.settings.ball[randomBall]}));
+                        if (typeof basicBot.settings.youtubeLink === "string")
+                            API.sendChat(subChat(basicBot.chat.youtube, {name: chat.un, link: basicBot.settings.youtubeLink}));
                     }
                 }
             }
         }
     };
-  
-    loadChat(trapbot.startup);
+
+    loadChat(basicBot.startup);
 }).call(this);
