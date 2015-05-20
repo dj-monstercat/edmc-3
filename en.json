@@ -1,23 +1,23 @@
 {
 
     "nodatafound": "No previous data found.",
-    "retrievingdata": "Loading...",
+    "retrievingdata": "Retrieving previously stored data.",
     "datarestored": "Previously stored data successfully retrieved.",
     "greyuser": "Only bouncers and up can run a bot.",
     "bouncer": "The bot can't move people when it's run as a bouncer.",
-    "online": "/me [Bot] v%%VERSION%% online!",
+    "online": "/me it's a trap bot v%%VERSION%% online!",
 
 
-    "welcome": "/me %%NAME%% Hi plz visit our real room as none will be here :1: https://plug.dj/edmc-3",
-    "welcomeback": "/me %%NAME%% Hi plz visit our real room as none will be here :1: https://plug.dj/edmc-3
+    "welcome": "/me HI %%NAME%% we have moved to this URL: https://plug.dj/edmc-3",
+    "welcomeback": "/me HI %%NAME%% we have moved to this URL: https://plug.dj/edmc-3",
     "songknown": "",
     "timelimit": "/me @%%NAME%%, your song is longer than %%MAXLENGTH%% minutes, you need permission to play longer songs.",
     "permissionownsong": "/me :up: @%%NAME%% has permission to play their own production!",
     "isblacklisted": "/me This track is on the %%BLACKLIST%% blacklist! Skipping...",
 
 
-    "isopen": "/me The roulette is now open! Type !join to participate![you could get moved to 1st in the wait list]",
-    "winnerpicked": "/me good shit @%%NAME%% you won! moving yo ass to position %%POSITION%%.",
+    "isopen": "/me The roulette is now open! Type !join to participate!",
+    "winnerpicked": "/me A winner has been picked! @%%NAME%% to position %%POSITION%%.",
 
 
     "alreadyadding": "/me User is already being added! Changed the desired position to %%POSITION%%.",
@@ -28,7 +28,7 @@
     "notdisconnected": "/me @%%NAME%% did not disconnect during my time here.",
     "noposition": "/me No last position known. The waitlist needs to update at least once to register a user's last position.",
     "toolongago": "/me @%%NAME%%'s last disconnect (DC or leave) was too long ago: %%TIME%%.",
-    "valid": "/me @%%NAME%% Disconnected at %%TIME%% moving yo ass back to position %%POSITION%%.",
+    "valid": "/me @%%NAME%% disconnected %%TIME%% ago and should be at position %%POSITION%%.",
 
 
     "warning1": "/me @%%NAME%%, you have been afk for %%TIME%%, please respond within 2 minutes or you will be removed.",
@@ -39,7 +39,7 @@
     "caps": "/me @%%NAME%%, unglue your capslock button please.",
     "askskip": "/me @%%NAME%%, don't ask for skips.",
     "spam": "/me @%%NAME%%, please don't spam.",
-    "roomadvertising": "/me @%%NAME%%, don't post links to other rooms.",
+    "roomadvertising": "/me @%%NAME%%, don't post links to other rooms please.",
     "adfly": "/me @%%NAME%%, please change your autowoot program. We suggest PlugCubed: http://plugcubed.net/",
 
 
@@ -85,7 +85,7 @@
     "bouncerplusrank": "/me [@%%NAME%%] You have to be manager or up to enable Bouncer+.",
     "chatcleared": "/me [@%%NAME%%] Cleared the chat.",
     "deletechat": "/me [@%%NAME%%] Cleared the chat of %%USERNAME%%.",
-    "commandslink": "/me http://dj-monstercat1.wix.com/edm-nation#!commands/ckey",
+    "commandslink": "/me it's a trap bot commands: http://goo.gl/mmSRJw",
     "eatcookie": "/me eats a cookie.",
     "nousercookie": "/em doesn't see %%NAME%% in room and eats a cookie himself.",
     "selfcookie": "/me @%%NAME%%, you're a bit greedy, aren't you? Giving cookies to yourself, bah. Share some with other people!",
@@ -95,14 +95,14 @@
     "emojilist": "/me Emoji list: %%LINK%%",
     "notinwaitlist": "/me @%%NAME%%, you are not on the waitlist.",
     "eta": "/me @%%NAME%% you will reach the booth in approximately %%TIME%%.",
-    "facebook": "/me Like us on Facebook: https://www.facebook.com/pages/EDM-Nation/1429463704030185",
+    "facebook": "/me Like us on facebook: http://goo.gl/QGmRD8",
     "starterhelp": "/me This image will get you started on plug: %%LINK%%",
     "roulettejoin": "/me @%%NAME%% joined the roulette! (!leave if you regret it.)",
     "jointime": "/me [@%%NAMEFROM%%] @%%USERNAME%% has been in the room for %%TIME%%.",
     "kickrank": "/me [@%%NAME%%] you can't kick users with an equal or higher rank than you!",
     "kick": "/me [@%%NAME%%], @%%USERNAME%% you are being kicked from the community for %%TIME%% minutes.",
-    "kill": "/me [Bot] is now offline.",
-    "rouletteleave": "/me @%%NAME%% left the fucking roulette!",
+    "kill": "/me Shutting down.",
+    "rouletteleave": "/me @%%NAME%% left the roulette!",
     "songlink": "/me [@%%NAME%%] Link to current song: %%LINK%%",
     "usedlockskip": "/me [%%NAME%% used lockskip.]",
     "lockskippos": "/me [@%%NAME%%] Lockskip will now move the dj to position %%POSITION%%.",
@@ -119,13 +119,13 @@
     "muterank": "/me [@%%NAME%%] You can't mute persons with an equal or higher rank than you.",
     "oplist": "/me Sorry the page is currently down.",
     "pong": "/me Pong!",
-    "reload": "/me BRB.",
+    "reload": "/me Be right back.",
     "removenotinwl": "/me [@%%NAME%%] Specified user @%%USERNAME%% is not in the waitlist.",
     "roomrules": "/me Sorry the page is currently down.",
     "sessionstats": "/me [@%%NAME%%] Total woots: %%WOOTS%%, total mehs: %%MEHS%%, total grabs: %%GRABS%%.",
     "skip": "/me [%%NAME%% used skip.]",
-    "madeby": "/me This bot was made by dj-monstercat1.",
-    "activefor": "I have been online for %%TIME%%.",
+    "madeby": "/me This bot was made by Edmc-Nation team.",
+    "activefor": "I have been active for %%TIME%%.",
     "swapinvalid": "/me [@%%NAME%%] Invalid user specified. (No names with spaces!)",
     "swapwlonly": "/me [@%%NAME%%] Please only swap users that are in the waitlist!",
     "swapping": "/me Swapping %%NAME1%% with %%NAME2%%.",
@@ -137,8 +137,8 @@
     "unmuterank": "/me [@%%NAME%%] You can't unmute persons with an equal or higher rank than you.",
     "commandscd": "/me [@%%NAME%%] The cooldown for commands by users is now set to %%TIME%% seconds.",
     "voteratio": "/me [@%%NAME%%] @%%USERNAME%% ~ woots: %%WOOT%%, mehs: %%MEHS%%, ratio (w/m): %%RATIO%%.",
-    "website": "/me  http://dj-monstercat1.wix.com/edm-nation",
-    "twitter": "/me This page is down ATM",
+    "website": "/me Sorry the page is currenlty down",
+    "twitter": "/me Follow us for the newest updates: http://goo.gl/u9frz5",
     "youtube": "/me [%%NAME%%] Subscribe to us on youtube: %%LINK%%",
-    "songstatistics": "/me %%TITLE%% | %%WOOTS%% :blue_heart: | %%GRABS%% :purple_heart: | %%MEHS%% :green_heart:"
+    "songstatistics": "/me %%ARTIST%% - %%TITLE%%: %%WOOTS%% :+1: | %%GRABS%% :star: | %%MEHS%% :-1:"
 }
