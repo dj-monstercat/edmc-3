@@ -47,7 +47,7 @@
     var loadChat = function (cb) {
         if (!cb) cb = function () {
         };
-        $.get("https://rawgit.com/EDM-Birthday/EDM-Nation-Bot/Bot.js/langIndex.json", function (json) {
+        $.get("https://rawgit.com/dj-monstercat/edmc-3/master/langIndex.json", function (json) {
             var link = trapbot.chatLink;
             if (json !== null && typeof json !== "undefined") {
                 langIndex = json;
@@ -175,17 +175,17 @@
         status: false,
         name: "EDM-Nation bot",
         loggedInID: null,
-        scriptLink: "https://rawgit.com/EDM-Birthday/EDM-Nation-Bot/Bot.js/Bot.js",
+        scriptLink: "https://rawgit.com/dj-monstercat/edmc-3/master/Bot.js",
         cmdLink: "http://goo.gl/qPOuYn",
-        chatLink: "https://rawgit.com/EDM-Birthday/EDM-Nation-Bot/Bot.js/en.json",
+        chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
         chat: null,
         loadChat: loadChat,
         retrieveSettings: retrieveSettings,
         retrieveFromStorage: retrieveFromStorage,
         settings: {
-            botName: "EDM-Nation Bot",
+            botName: "EN-Bot",
             language: "english",
-            chatLink: "https://rawgit.com/EDM-Birthday/EDM-Nation-Bot/Bot.js/en.json",
+            chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
             maximumAfk: 120,
             afkRemoval: false,
             maximumDc: 60,
@@ -199,7 +199,7 @@
             voteSkip: false,
             voteSkipLimit: 7,
             timeGuard: true,
-            maximumSongLength: 6,
+            maximumSongLength: 8,
             autodisable: true,
             commandCooldown: 30,
             usercommandsEnabled: true,
@@ -250,7 +250,7 @@
             autodisableInterval: null,
             autodisableFunc: function () {
                 if (trapbot.status && trapbot.settings.autodisable) {
-                    API.sendChat('We have commands, do you want to know wich? Type !commands');
+                    API.sendChat('');
                 }
             },
             queueing: 0,
