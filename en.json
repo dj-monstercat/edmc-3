@@ -6,6 +6,7 @@
     "greyuser": "Only bouncers and up can run a bot.",
     "bouncer": "The bot can't move people when it's run as a bouncer.",
     "online": "/me EN-Bot v%%VERSION%% online!",
+    "ball": "/me %%NAME%%'s question was: \"%%QUESTION%%\" and %%BOTNAME%%'s response is: \"%%RESPONSE%%\"",
 
 
     "welcome": "/me Hello @%%NAME%% and welcome to EDM Nation!",
