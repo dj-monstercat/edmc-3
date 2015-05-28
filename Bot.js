@@ -3004,6 +3004,29 @@
                 }
             },
                 
+            ghostbusterCommand: {
+                command: 'ghostbuster',
+                rank: 'user',
+                type: 'startsWith',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        var msg = chat.message;
+                        var name;
+                        if (msg.length === cmd.length) name = chat.un;
+                        else {
+                            name = msg.substr(cmd.length + 2);
+                        }
+                        var user = basicBot.userUtilities.lookupUserName(name);
+                        if (user === false || !user.inRoom) {
+                            return API.sendChat(subChat(basicBot.chat.ghosting, {name1: chat.un, name2: name}));
+                        }
+                        else API.sendChat(subChat(basicBot.chat.notghosting, {name1: chat.un, name2: name}));     
+                    }
+                }
+            },
+            
             ballCommand: {
                 command: ['8ball', 'ask'],
                 rank: 'user',
