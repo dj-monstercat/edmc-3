@@ -140,5 +140,7 @@
     "website": "/me Sorry the page is currenlty down",
     "twitter": "/me Follow us for the newest updates: http://goo.gl/u9frz5",
     "youtube": "/me [%%NAME%%] Subscribe to us on youtube: %%LINK%%",
+    "notghosting": "[%%NAME1%%] %%NAME2%% is not ghosting.",
+    "ghosting": "[%%NAME1%%] %%NAME2%% is either ghosting or not here.",
     "songstatistics": "/me %%ARTIST%% - %%TITLE%%: %%WOOTS%% :+1: | %%GRABS%% :star: | %%MEHS%% :-1:"
 }
