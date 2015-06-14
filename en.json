@@ -4,7 +4,7 @@
     "datarestored": "Previously stored data successfully retrieved.",
     "greyuser": "Only bouncers and up can run a bot.",
     "bouncer": "The bot can't move people when it's run as a bouncer.",
-    "online": "/me EN-Bot v%%VERSION%% online!",
+    "online": "/me MRbanana reporting for duty!, v%%VERSION%%",
     "ball": "/me %%NAME%%'s question was: \"%%QUESTION%%\" and %%BOTNAME%%'s response is: \"%%RESPONSE%%\"",
 
 
@@ -121,7 +121,10 @@
     "pong": "/me Pong!",
     "reload": "/me Be right back.",
     "removenotinwl": "/me [@%%NAME%%] Specified user @%%USERNAME%% is not in the waitlist.",
-    "roomrules": "/me Don't forget to read the rules: https://docs.google.com/document/d/11oSOFeYD3LLiEalYpXVMPS7I7r6k6-qJPUaMn6OhUYU/edit",
+    "roomrules": "/me no being a prick
+no videos that are irrelevant or disturbing.
+8 min song limit.
+No advertising. This falls under being a prick.",
     "sessionstats": "/me [@%%NAME%%] Total woots: %%WOOTS%%, total mehs: %%MEHS%%, total grabs: %%GRABS%%.",
     "skip": "/me [%%NAME%% used skip.]",
     "madeby": "/me This bot was made by dj-monstercat1.",
