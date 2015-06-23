@@ -47,7 +47,7 @@
     var loadChat = function (cb) {
         if (!cb) cb = function () {
         };
-        $.get("https://rawgit.com/dj-monstercat/edmc-3/master/langIndex.json", function (json) {
+        $.get("https://rawgit.com/EDM-Birthday/EDM-Nation-Bot/Bot.js/langIndex.json", function (json) {
             var link = trapbot.chatLink;
             if (json !== null && typeof json !== "undefined") {
                 langIndex = json;
@@ -171,21 +171,21 @@
     var botCreatorIDs = [];
 
     var trapbot = {
-        version: "1",
+        version: "4.7.1",
         status: false,
         name: "EDM-Nation bot",
         loggedInID: null,
-        scriptLink: "https://rawgit.com/dj-monstercat/edmc-3/master/Bot.js",
+        scriptLink: "https://rawgit.com/EDM-Birthday/EDM-Nation-Bot/Bot.js/Bot.js",
         cmdLink: "http://goo.gl/qPOuYn",
-        chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
+        chatLink: "https://rawgit.com/EDM-Birthday/EDM-Nation-Bot/Bot.js/en.json",
         chat: null,
         loadChat: loadChat,
         retrieveSettings: retrieveSettings,
         retrieveFromStorage: retrieveFromStorage,
         settings: {
-            botName: "EN-Bot",
+            botName: "EDM-Nation Bot",
             language: "english",
-            chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
+            chatLink: "https://rawgit.com/EDM-Birthday/EDM-Nation-Bot/Bot.js/en.json",
             maximumAfk: 120,
             afkRemoval: false,
             maximumDc: 60,
@@ -199,7 +199,7 @@
             voteSkip: false,
             voteSkipLimit: 7,
             timeGuard: true,
-            maximumSongLength: 8,
+            maximumSongLength: 10,
             autodisable: true,
             commandCooldown: 30,
             usercommandsEnabled: true,
@@ -217,16 +217,16 @@
             afkRankCheck: "ambassador",
             motdEnabled: false,
             motdInterval: 20,
-            motd: "",
+            motd: "Welcome to EDM Nation remember to favourite the room if you want to return at a later time.",
             filterChat: true,
             etaRestriction: false,
             welcome: true,
-            opLink: "null",
-            rulesLink: "null",
+            opLink: "http://goo.gl/SGFnOh",
+            rulesLink: "http://goo.gl/96KCIU",
             themeLink: null,
-            fbLink: "null",
+            fbLink: "",
             youtubeLink: null,
-            website: "null",
+            website: "http://jsim31.wix.com/edm-nation",
             intervalMessages: [],
             messageInterval: 5,
             songstats: true,
@@ -250,7 +250,7 @@
             autodisableInterval: null,
             autodisableFunc: function () {
                 if (trapbot.status && trapbot.settings.autodisable) {
-                    API.sendChat('');
+                    API.sendChat('We have commands, do you want to know wich? Type !commands');
                 }
             },
             queueing: 0,
@@ -2931,122 +2931,11 @@
                     else {
                         if (typeof trapbot.settings.youtubeLink === "string")
                             API.sendChat(subChat(trapbot.chat.youtube, {name: chat.un, link: trapbot.settings.youtubeLink}));
-                    } 
-                }
-            },
-
-            gifCommand: {
-                command: ['gif', 'giphy'],
-                rank: 'user',
-                type: 'startsWith',
-                functionality: function (chat, cmd) {
-                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
-                    else {
-                        var msg = chat.message;
-                        if (msg.length !== cmd.length) {
-                            function get_id(api_key, fixedtag, func)
-                            {
-                                $.getJSON(
-                                    "https://tv.giphy.com/v1/gifs/random?", 
-                                    { 
-                                        "format": "json",
-                                        "api_key": api_key,
-                                        "rating": rating,
-                                        "tag": fixedtag
-                                    },
-                                    function(response)
-                                    {
-                                        func(response.data.id);
-                                    }
-                                    )
-                            }
-                            var api_key = "dc6zaTOxFJmzC"; // public beta key
-                            var rating = "pg-13"; // PG 13 gifs
-                            var tag = msg.substr(cmd.length + 1);
-                            var fixedtag = tag.replace(/ /g,"+");
-                            var commatag = tag.replace(/ /g,", ");
-                            get_id(api_key, tag, function(id) {
-                                if (typeof id !== 'undefined') {
-                                    API.sendChat(subChat(trapbot.chat.validgiftags, {name: chat.un, id: id, tags: commatag}));
-                                } else {
-                                    API.sendChat(subChat(trapbot.chat.invalidgiftags, {name: chat.un, tags: commatag}));
-                                }
-                            });
-                        }
-                        else {
-                            function get_random_id(api_key, func)
-                            {
-                                $.getJSON(
-                                    "https://tv.giphy.com/v1/gifs/random?", 
-                                    { 
-                                        "format": "json",
-                                        "api_key": api_key,
-                                        "rating": rating
-                                    },
-                                    function(response)
-                                    {
-                                        func(response.data.id);
-                                    }
-                                    )
-                            }
-                            var api_key = "dc6zaTOxFJmzC"; // public beta key
-                            var rating = "pg-13"; // PG 13 gifs
-                            get_random_id(api_key, function(id) {
-                                if (typeof id !== 'undefined') {
-                                    API.sendChat(subChat(trapbot.chat.validgifrandom, {name: chat.un, id: id}));
-                                } else {
-                                    API.sendChat(subChat(trapbott.chat.invalidgifrandom, {name: chat.un}));
-                                }
-                            });
-                        }
                     }
-                }
-            },
-                
-            ghostbusterCommand: {
-                command: 'ghostbuster',
-                rank: 'user',
-                type: 'startsWith',
-                functionality: function (chat, cmd) {
-                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
-                    else {
-                        var msg = chat.message;
-                        var name;
-                        if (msg.length === cmd.length) name = chat.un;
-                        else {
-                            name = msg.substr(cmd.length + 2);
-                        }
-                        var user = basicBot.userUtilities.lookupUserName(name);
-                        if (user === false || !user.inRoom) {
-                            return API.sendChat(subChat(basicBot.chat.ghosting, {name1: chat.un, name2: name}));
-                        }
-                        else API.sendChat(subChat(basicBot.chat.notghosting, {name1: chat.un, name2: name}));     
-                    }
-                }
-            },
-            
-            ballCommand: {
-                command: ['8ball', 'ask'],
-                rank: 'user',
-                type: 'startsWith',
-                functionality: function (chat, cmd) {
-                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
-                    else {
-                            var crowd = API.getUsers();
-                            var msg = chat.message;
-                            var argument = msg.substring(cmd.length + 1);
-                            var randomUser = Math.floor(Math.random() * crowd.length);
-                            var randomBall = Math.floor(Math.random() * trapbot.chat.balls.length);
-                            var randomSentence = Math.floor(Math.random() * 1);
-                            API.sendChat(subChat(trapbot.chat.ball, {name: chat.un, botname: trapbot.settings.botName, question: argument, response: trapbot.chat.balls[randomBall]}));
-                    }                   
                 }
             }
         }
     };
-    
+
     loadChat(trapbot.startup);
 }).call(this);
