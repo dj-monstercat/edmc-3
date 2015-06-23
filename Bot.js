@@ -47,7 +47,7 @@
     var loadChat = function (cb) {
         if (!cb) cb = function () {
         };
-        $.get("https://rawgit.com/EDM-Birthday/EDM-Nation-Bot/Bot.js/langIndex.json", function (json) {
+        $.get("https://rawgit.com/dj-monstercat/edmc-3/master/langIndex.json", function (json) {
             var link = trapbot.chatLink;
             if (json !== null && typeof json !== "undefined") {
                 langIndex = json;
@@ -175,9 +175,9 @@
         status: false,
         name: "EDM-Nation bot",
         loggedInID: null,
-        scriptLink: "https://rawgit.com/EDM-Birthday/EDM-Nation-Bot/Bot.js/Bot.js",
-        cmdLink: "http://goo.gl/qPOuYn",
-        chatLink: "https://rawgit.com/EDM-Birthday/EDM-Nation-Bot/Bot.js/en.json",
+        scriptLink: "https://rawgit.com/dj-monstercat/edmc-3/master/Bot.js",
+        cmdLink: "Error",
+        chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
         chat: null,
         loadChat: loadChat,
         retrieveSettings: retrieveSettings,
@@ -185,7 +185,7 @@
         settings: {
             botName: "EDM-Nation Bot",
             language: "english",
-            chatLink: "https://rawgit.com/EDM-Birthday/EDM-Nation-Bot/Bot.js/en.json",
+            chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
             maximumAfk: 120,
             afkRemoval: false,
             maximumDc: 60,
