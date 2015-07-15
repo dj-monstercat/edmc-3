@@ -47,7 +47,7 @@
     var loadChat = function (cb) {
         if (!cb) cb = function () {
         };
-        $.get("https://rawgit.com/dj-monstercat/EF-Bot/master/langIndex.json", function (json) {
+        $.get("https://rawgit.com/dj-monstercat/edmc-3/master/langIndex.json", function (json) {
             var link = trapbot.chatLink;
             if (json !== null && typeof json !== "undefined") {
                 langIndex = json;
@@ -171,21 +171,21 @@
     var botCreatorIDs = [];
 
     var trapbot = {
-        version: "4.7.1",
+        version: "4.8.1",
         status: false,
         name: "EF-Bot",
         loggedInID: null,
-        scriptLink: "https://rawgit.com/dj-monstercat/EF-Bot/master/BetaBot.js",
-        cmdLink: "http://en-bot-commands.jimdo.com/",
-        chatLink: "https://rawgit.com/dj-monstercat/EF-Bot/master/en.json",
+        scriptLink: "https://rawgit.com/dj-monstercat/edmc-3/master/BetaBot.js",
+        cmdLink: "",
+        chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
         chat: null,
         loadChat: loadChat,
         retrieveSettings: retrieveSettings,
         retrieveFromStorage: retrieveFromStorage,
         settings: {
-            botName: "EF-Bot",
+            botName: "EN-Bot",
             language: "english",
-            chatLink: "https://rawgit.com/dj-monstercat/EF-Bot/master/en.json",
+            chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
             maximumAfk: 120,
             afkRemoval: false,
             maximumDc: 60,
@@ -217,23 +217,23 @@
             afkRankCheck: "ambassador",
             motdEnabled: false,
             motdInterval: 20,
-            motd: "Welcome to EDM Nation remember to favourite the room if you want to return at a later time.",
+            motd: "null.",
             filterChat: true,
             etaRestriction: false,
             welcome: true,
-            opLink: "http://goo.gl/SGFnOh",
-            rulesLink: "http://electronicfamilyofficial.jimdo.com/rules/",
+            opLink: "null",
+            rulesLink:null
             themeLink: null,
-            fbLink: "http://goo.gl/jKRvJw",
+            fbLink: "null",
             youtubeLink: null,
-            website: "http://electronicfamilyofficial.jimdo.com/",
+            website: "null",
             intervalMessages: [],
             messageInterval: 5,
             songstats: true,
             commandLiteral: "!",
             blacklists: {
-                NSFW: "http://jsim31.wix.com/edm-nation",
-                OP: "http://jsim31.wix.com/edm-nation"
+                NSFW: "null",
+                OP: "null"
             }
         },
         room: {
