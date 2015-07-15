@@ -47,7 +47,7 @@
     var loadChat = function (cb) {
         if (!cb) cb = function () {
         };
-        $.get("https://rawgit.com/dj-monstercat/edmc-3/master/langIndex.json", function (json) {
+        $.get("https://rawgit.com/dj-monstercat/EF-Bot/master/langIndex.json", function (json) {
             var link = trapbot.chatLink;
             if (json !== null && typeof json !== "undefined") {
                 langIndex = json;
@@ -173,19 +173,19 @@
     var trapbot = {
         version: "4.7.1",
         status: false,
-        name: "EDM-Nation bot",
+        name: "EF-Bot",
         loggedInID: null,
-        scriptLink: "https://rawgit.com/dj-monstercat/edmc-3/master/Bot.js",
-        cmdLink: "Error",
-        chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
+        scriptLink: "https://rawgit.com/dj-monstercat/EF-Bot/master/BetaBot.js",
+        cmdLink: "http://en-bot-commands.jimdo.com/",
+        chatLink: "https://rawgit.com/dj-monstercat/EF-Bot/master/en.json",
         chat: null,
         loadChat: loadChat,
         retrieveSettings: retrieveSettings,
         retrieveFromStorage: retrieveFromStorage,
         settings: {
-            botName: "EDM-Nation Bot",
+            botName: "EF-Bot",
             language: "english",
-            chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
+            chatLink: "https://rawgit.com/dj-monstercat/EF-Bot/master/en.json",
             maximumAfk: 120,
             afkRemoval: false,
             maximumDc: 60,
@@ -222,11 +222,11 @@
             etaRestriction: false,
             welcome: true,
             opLink: "http://goo.gl/SGFnOh",
-            rulesLink: "http://goo.gl/96KCIU",
+            rulesLink: "http://electronicfamilyofficial.jimdo.com/rules/",
             themeLink: null,
-            fbLink: "",
+            fbLink: "http://goo.gl/jKRvJw",
             youtubeLink: null,
-            website: "http://jsim31.wix.com/edm-nation",
+            website: "http://electronicfamilyofficial.jimdo.com/",
             intervalMessages: [],
             messageInterval: 5,
             songstats: true,
@@ -2361,9 +2361,9 @@
                     else {
                         API.sendChat(trapbot.chat.pong)
                     }
-                }
-            },
-
+                }   
+            },  
+                
             refreshCommand: {
                 command: 'refresh',
                 rank: 'manager',
@@ -2932,10 +2932,29 @@
                         if (typeof trapbot.settings.youtubeLink === "string")
                             API.sendChat(subChat(trapbot.chat.youtube, {name: chat.un, link: trapbot.settings.youtubeLink}));
                     }
-                }
-            }
-        }
+                }   
+            },   
+           
+            ballCommand: {
+                command: ['8ball', 'ask'],
+                rank: 'user',
+                type: 'startsWith',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!trapbot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                            var crowd = API.getUsers();
+                            var msg = chat.message;
+                            var argument = msg.substring(cmd.length + 1);
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomBall = Math.floor(Math.random() * trapbot.chat.balls.length);
+                            var randomSentence = Math.floor(Math.random() * 1);
+                            API.sendChat(subChat(trapbot.chat.ball, {name: chat.un, botname: trapbot.settings.botName, question: argument, response: trapbot.chat.balls[randomBall]}));
+                    }                        
+                }              
+            }                 
+        }  
     };
-
+    
     loadChat(trapbot.startup);
 }).call(this);
