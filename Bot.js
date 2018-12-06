@@ -47,7 +47,7 @@
     var loadChat = function (cb) {
         if (!cb) cb = function () {
         };
-        $.get("https://rawgit.com/dj-monstercat/edmc-3/master/langIndex.json", function (json) {
+        $.get("https://cdn.jsdelivr.net/gh/dj-monstercat/edmc-3/langIndex.json", function (json) {
             var link = trapbot.chatLink;
             if (json !== null && typeof json !== "undefined") {
                 langIndex = json;
@@ -175,9 +175,9 @@
         status: false,
         name: "edmc-3",
         loggedInID: null,
-        scriptLink: "https://rawgit.com/dj-monstercat/edmc-3/master/Bot.js",
+        scriptLink: "https://cdn.jsdelivr.net/gh/dj-monstercat/edmc-3/Bot.js",
         cmdLink: "http://en-bot-commands.jimdo.com/",
-        chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
+        chatLink: "https://cdn.jsdelivr.net/gh/dj-monstercat/edmc-3/en.json",
         chat: null,
         loadChat: loadChat,
         retrieveSettings: retrieveSettings,
@@ -185,7 +185,7 @@
         settings: {
             botName: "Checking-Bot",
             language: "english",
-            chatLink: "https://rawgit.com/dj-monstercat/edmc-3/master/en.json",
+            chatLink: "https://cdn.jsdelivr.net/gh/dj-monstercat/edmc-3/en.json",
             maximumAfk: 120,
             afkRemoval: false,
             maximumDc: 60,
